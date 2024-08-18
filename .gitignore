@@ -129,7 +129,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/  # Commented out - we need lib/ for Next.js utilities
 lib64/
 parts/
 sdist/
