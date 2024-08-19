@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { UrlInput } from "@/components/url-input"
 import { VideoInfo } from "@/components/video-info"
-import { StreamSelector } from "@/components/stream-selector"
+import { EnhancedStreamSelector } from "@/components/enhanced-stream-selector"
 import { DownloadProgress } from "@/components/download-progress"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Play, Download, Settings } from "lucide-react"
@@ -99,16 +99,16 @@ export default function Home() {
 
             <div className="flex flex-wrap justify-center gap-4 text-sm text-youtube-text-secondary">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span>9 Quality Options</span>
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Smart Download</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span>Video + Audio</span>
+                <span>Auto Quality Selection</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-youtube-red rounded-full"></div>
-                <span>Instant Download</span>
+                <span>Instant Merge</span>
               </div>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function Home() {
 
             {videoMetadata && (
               <div className="animate-in slide-in-from-bottom-4 duration-700">
-                <StreamSelector
+                <EnhancedStreamSelector
                   streams={videoMetadata.streams}
                   videoUrl={videoUrl}
                   videoTitle={videoMetadata.title}
