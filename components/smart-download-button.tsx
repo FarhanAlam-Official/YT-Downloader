@@ -96,6 +96,7 @@ export function SmartDownloadButton({
       return
     }
 
+    let filename = ""
     try {
       setError(null)
       setProgress(0)
@@ -106,7 +107,7 @@ export function SmartDownloadButton({
         .replace(/\s+/g, "_")
         .substring(0, 50)
 
-      const filename = `${sanitizedTitle}_SmartDownload.mp4`
+      filename = `${sanitizedTitle}_SmartDownload.mp4`
       onDownloadStart(filename)
 
       // Start smart download with progress tracking
@@ -153,7 +154,7 @@ export function SmartDownloadButton({
       setError(errorMessage)
       setDownloadStage("error")
       setProgress(0)
-      onDownloadError(errorMessage, __filename)
+      onDownloadError(errorMessage, filename)
     }
   }
 
@@ -194,10 +195,10 @@ export function SmartDownloadButton({
       <Card className="p-6 bg-gradient-to-br from-green-500/5 to-emerald-500/5 border-green-500/20">
         <div className="text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full">
-            <Loader2 className="h-5 w-5 text-green-400 animate-spin" />
-            <span className="text-green-300 font-medium">Analyzing Video...</span>
+            <Loader2 className="h-5 w-5 text-green-400 animate-spin dark:text-green-400 light:text-green-600" />
+            <span className="text-green-foreground font-medium dark:text-green-foreground light:text-green-700">Analyzing Video...</span>
           </div>
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Finding the best quality options for you
           </p>
         </div>
@@ -209,8 +210,8 @@ export function SmartDownloadButton({
   if (!smartInfo && downloadStage === "error") {
     return (
       <Alert variant="destructive" className="bg-red-500/10 border-red-500/20">
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription className="text-red-200">
+        <AlertCircle className="h-4 w-4 dark:text-red-200 light:text-red-700" />
+        <AlertDescription className="text-red-200 dark:text-red-200 light:text-red-700">
           {error || "Unable to analyze video for smart download. Please use manual selection."}
         </AlertDescription>
       </Alert>
@@ -221,8 +222,8 @@ export function SmartDownloadButton({
   if (!smartInfo) {
     return (
       <Alert variant="destructive" className="bg-red-500/10 border-red-500/20">
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription className="text-red-200">
+        <AlertCircle className="h-4 w-4 dark:text-red-200 light:text-red-700" />
+        <AlertDescription className="text-red-200 dark:text-red-200 light:text-red-700">
           No suitable streams available for smart download. Please use manual selection.
         </AlertDescription>
       </Alert>
@@ -235,40 +236,40 @@ export function SmartDownloadButton({
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 rounded-full">
-            <Zap className="h-5 w-5 text-green-400" />
-            <span className="text-green-300 font-medium">Smart Download Ready</span>
+            <Zap className="h-5 w-5 text-green-400 dark:text-green-400 light:text-green-600" />
+            <span className="text-green-foreground font-medium dark:text-green-foreground light:text-green-700">Smart Download Ready</span>
           </div>
-          <p className="text-gray-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             We've selected the best quality available for you
           </p>
         </div>
 
         {/* Quality Info */}
-        <div className="bg-gray-900/40 rounded-xl p-4 space-y-3">
+        <div className="stream-selector-card rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-gray-400 text-sm">Selected Quality:</span>
-            <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
+            <span className="text-muted-foreground text-sm">Selected Quality:</span>
+            <Badge className="bg-green-500/20 text-green-foreground border-green-500/30">
               {smartInfo.recommended_quality}
             </Badge>
           </div>
           
           <div className="flex items-center justify-between">
-            <span className="text-gray-400 text-sm">Estimated Size:</span>
-            <span className="text-white font-medium">{smartInfo.estimated_size_mb.toFixed(1)} MB</span>
+            <span className="text-muted-foreground text-sm">Estimated Size:</span>
+            <span className="text-foreground font-medium">{smartInfo.estimated_size_mb.toFixed(1)} MB</span>
           </div>
           
           <div className="flex items-center justify-between">
-            <span className="text-gray-400 text-sm">Type:</span>
+            <span className="text-muted-foreground text-sm">Type:</span>
             <div className="flex items-center gap-2">
-              <FileVideo className="h-4 w-4 text-green-400" />
-              <span className="text-green-300 text-sm">
+              <FileVideo className="h-4 w-4 text-green-400 dark:text-green-400 light:text-green-600" />
+              <span className="text-green-foreground text-sm dark:text-green-foreground light:text-green-700">
                 {smartInfo.merge_required ? "Merged File (Video + Audio)" : "Single File (Video + Audio)"}
               </span>
             </div>
           </div>
           
           {smartInfo.merge_required && !smartInfo.ffmpeg_available && (
-            <div className="p-2 bg-orange-500/20 border border-orange-500/30 rounded text-xs text-orange-200">
+            <div className="stream-selector-card p-2 rounded text-xs">
               ⚠️ FFmpeg not available - may fall back to lower quality
             </div>
           )}
@@ -278,7 +279,7 @@ export function SmartDownloadButton({
         {isDownloading && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 text-sm font-medium">{getStageText()}</span>
+              <span className="text-muted-foreground text-sm font-medium">{getStageText()}</span>
               <span className="text-green-400 text-sm">{progress}%</span>
             </div>
             <Progress value={progress} className="h-2" />
@@ -301,19 +302,19 @@ export function SmartDownloadButton({
         {/* Error Display */}
         {error && (
           <Alert variant="destructive" className="bg-red-500/10 border-red-500/20">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription className="text-red-200">{error}</AlertDescription>
+            <AlertCircle className="h-4 w-4 dark:text-red-foreground light:text-red-700" />
+            <AlertDescription className="text-red-foreground dark:text-red-foreground light:text-red-700">{error}</AlertDescription>
           </Alert>
         )}
 
         {/* Success Message */}
         {downloadStage === "complete" && (
-          <div className="p-4 bg-green-500/20 border border-green-500/30 rounded-xl">
+          <div className="stream-selector-card p-4 rounded-xl">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-green-400" />
+              <CheckCircle className="h-5 w-5 text-green-400 dark:text-green-400 light:text-green-600" />
               <div className="text-sm">
-                <p className="text-green-300 font-medium">Download Complete!</p>
-                <p className="text-green-200/80">Your video has been downloaded and is ready to play.</p>
+                <p className="text-green-foreground font-medium dark:text-green-foreground light:text-green-700">Download Complete!</p>
+                <p className="text-green-foreground/80 dark:text-green-foreground/80 light:text-green-600/80">Your video has been downloaded and is ready to play.</p>
               </div>
             </div>
           </div>
@@ -339,12 +340,12 @@ export function SmartDownloadButton({
 
         {/* Info Note */}
         {downloadStage === "ready" && smartInfo.merge_required && (
-          <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+          <div className="stream-selector-card p-3 rounded-lg">
             <div className="flex items-start gap-2">
-              <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0" />
-              <div className="text-xs text-blue-200">
-                <p className="font-medium mb-1">Advanced Processing</p>
-                <p>This will download high-quality video and audio separately, then merge them into a single file for the best quality experience.</p>
+              <Info className="h-4 w-4 text-blue-400 mt-0.5 flex-shrink-0 dark:text-blue-400 light:text-blue-600" />
+              <div className="text-xs text-blue-foreground dark:text-blue-foreground light:text-blue-700">
+                <p className="font-medium mb-1 dark:font-medium light:font-medium">Advanced Processing</p>
+                <p className="dark:text-blue-foreground light:text-blue-700">This will download high-quality video and audio separately, then merge them into a single file for the best quality experience.</p>
               </div>
             </div>
           </div>

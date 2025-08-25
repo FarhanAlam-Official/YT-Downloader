@@ -83,7 +83,7 @@ export function EnhancedStreamSelector({
           <div className="text-center">
             <button
               onClick={() => setDownloadMode("manual")}
-              className="text-sm text-gray-400 hover:text-gray-300 transition-colors underline underline-offset-4 decoration-dotted hover:decoration-solid"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-dotted hover:decoration-solid dark:text-muted-foreground light:text-gray-600 dark:hover:text-foreground light:hover:text-gray-800"
             >
               Need more control? Switch to manual selection
             </button>
@@ -106,7 +106,7 @@ export function EnhancedStreamSelector({
           <div className="text-center">
             <button
               onClick={() => setDownloadMode("smart")}
-              className="text-sm text-gray-400 hover:text-gray-300 transition-colors underline underline-offset-4 decoration-dotted hover:decoration-solid"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-dotted hover:decoration-solid dark:text-muted-foreground light:text-gray-600 dark:hover:text-foreground light:hover:text-gray-800"
             >
               Want automatic selection? Switch to smart download
             </button>

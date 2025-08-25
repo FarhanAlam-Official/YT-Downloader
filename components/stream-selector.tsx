@@ -31,7 +31,7 @@ export function StreamSelector({
   const [downloadingStreams, setDownloadingStreams] = useState<Set<string>>(new Set())
   const [error, setError] = useState<string | null>(null)
   const [showVideoOnly, setShowVideoOnly] = useState(false)
-  const [showAudioOnly, setShowAudioOnly] = useState(false)
+  const [showAudioOnly, setShowAudioOnly] = useState(true) // Changed default to true to show audio files by default
 
   const handleDownload = async (stream: Stream) => {
     const streamId = stream.id
@@ -113,13 +113,13 @@ export function StreamSelector({
 
   // Organize streams by type
   const progressiveStreams = streams.filter(stream => 
-    stream.quality.includes('with audio') && !stream.quality.includes('audio only')
+    stream.type === 'video' && !stream.quality.includes('video only') && !stream.quality.includes('audio only')
   )
   const videoOnlyStreams = streams.filter(stream => 
-    stream.quality.includes('video only')
+    stream.quality.includes('video only') || (stream.type === 'video' && stream.quality.includes('video only'))
   )
   const audioOnlyStreams = streams.filter(stream => 
-    stream.quality.includes('audio only')
+    stream.quality.includes('audio only') || stream.type === 'audio'
   )
 
   // Filter streams based on user preferences
@@ -148,10 +148,10 @@ export function StreamSelector({
       {/* Header Section */}
       <div className="text-center space-y-4">
         <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 rounded-full shadow-lg">
-          <Download className="h-6 w-6 text-white" />
-          <h3 className="text-xl font-bold text-white">Choose Your Download</h3>
+          <Download className="h-6 w-6 text-white dark:text-white light:text-white" />
+          <h3 className="text-xl font-bold text-white dark:text-white light:text-white">Choose Your Download</h3>
         </div>
-        <p className="text-gray-400 max-w-2xl mx-auto">
+        <p className="text-muted-foreground max-w-2xl mx-auto">
           Select the best quality that suits your needs. We recommend video files with audio for complete playback.
         </p>
       </div>
@@ -162,15 +162,15 @@ export function StreamSelector({
           <div className="absolute inset-0 bg-green-500/5" />
           <div className="relative flex items-start gap-4">
             <div className="flex-shrink-0 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-              <CheckCircle className="h-6 w-6 text-white" />
+              <CheckCircle className="h-6 w-6 text-white dark:text-white light:text-white" />
             </div>
             <div className="flex-1">
-              <h4 className="text-lg font-semibold text-green-300 mb-2">Best Choice Available!</h4>
-              <p className="text-green-200/80 mb-3">
+              <h4 className="text-lg font-semibold text-green-foreground mb-2">Best Choice Available!</h4>
+              <p className="text-green-foreground/80 mb-3">
                 We found {progressiveStreams.length} complete video file{progressiveStreams.length > 1 ? 's' : ''} that include both video and audio. 
                 These are perfect for watching and will play with full sound.
               </p>
-              <div className="flex items-center gap-2 text-sm text-green-300">
+              <div className="flex items-center gap-2 text-sm text-green-foreground">
                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                 <span>Ready to download • No additional software needed</span>
               </div>
@@ -180,12 +180,12 @@ export function StreamSelector({
       )}
 
       {/* Advanced Options */}
-      <div className="bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6">
+      <div className="stream-selector-card p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-            <Filter className="h-5 w-5 text-blue-400" />
+          <div className="w-10 h-10 bg-blue-500/20 dark:bg-blue-500/20 light:bg-blue-500/30 rounded-lg flex items-center justify-center">
+            <Filter className="h-5 w-5 text-blue-400 dark:text-blue-400 light:text-blue-600" />
           </div>
-          <h4 className="text-lg font-semibold text-white">Advanced Options</h4>
+          <h4 className="text-lg font-semibold text-foreground dark:text-white light:text-gray-900">Advanced Options</h4>
         </div>
         
         <div className="grid sm:grid-cols-2 gap-6">
@@ -198,7 +198,7 @@ export function StreamSelector({
                   onCheckedChange={setShowVideoOnly}
                   className="data-[state=checked]:bg-orange-500"
                 />
-                <Label htmlFor="show-video-only" className="text-sm font-medium text-gray-300 cursor-pointer">
+                <Label htmlFor="show-video-only" className="text-sm font-medium text-muted-foreground dark:text-muted-foreground light:text-gray-700 cursor-pointer">
                   Show video-only files
                 </Label>
               </div>
@@ -206,7 +206,7 @@ export function StreamSelector({
                 {videoOnlyStreams.length}
               </Badge>
             </div>
-            <p className="text-xs text-gray-500 ml-9">
+            <p className="text-xs text-muted-foreground dark:text-muted-foreground light:text-gray-600 ml-9">
               High quality video without audio tracks
             </p>
           </div>
@@ -220,7 +220,7 @@ export function StreamSelector({
                   onCheckedChange={setShowAudioOnly}
                   className="data-[state=checked]:bg-blue-500"
                 />
-                <Label htmlFor="show-audio-only" className="text-sm font-medium text-gray-300 cursor-pointer">
+                <Label htmlFor="show-audio-only" className="text-sm font-medium text-muted-foreground dark:text-muted-foreground light:text-gray-700 cursor-pointer">
                   Show audio-only files
                 </Label>
               </div>
@@ -228,19 +228,19 @@ export function StreamSelector({
                 {audioOnlyStreams.length}
               </Badge>
             </div>
-            <p className="text-xs text-gray-500 ml-9">
+            <p className="text-xs text-muted-foreground dark:text-muted-foreground light:text-gray-600 ml-9">
               Audio tracks only, perfect for music
             </p>
           </div>
         </div>
         
         {(showVideoOnly || showAudioOnly) && (
-          <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+          <div className="mt-4 p-4 bg-amber-500/10 dark:bg-amber-500/10 light:bg-amber-100/50 border border-amber-500/20 dark:border-amber-500/20 light:border-amber-300/50 rounded-xl">
             <div className="flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-400 mt-0.5 flex-shrink-0" />
+              <AlertCircle className="h-5 w-5 text-amber-400 dark:text-amber-400 light:text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="text-sm">
-                <p className="text-amber-200 font-medium mb-1">Advanced User Notice</p>
-                <p className="text-amber-200/80">
+                <p className="text-amber-foreground dark:text-amber-foreground light:text-amber-800 font-medium mb-1">Advanced User Notice</p>
+                <p className="text-amber-foreground/80 dark:text-amber-foreground/80 light:text-amber-700/90">
                   Video-only files require separate audio. Audio-only files contain no video. 
                   Most users should choose complete video files above.
                 </p>
@@ -252,8 +252,8 @@ export function StreamSelector({
 
       {error && (
         <Alert variant="destructive" className="mb-6 bg-red-500/10 border-red-500/20">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="text-red-200">{error}</AlertDescription>
+          <AlertCircle className="h-4 w-4 dark:text-red-foreground light:text-red-foreground" />
+          <AlertDescription className="text-red-foreground">{error}</AlertDescription>
         </Alert>
       )}
 
@@ -261,7 +261,7 @@ export function StreamSelector({
       <div className="space-y-6">
         {/* Stream Count and Sort Info */}
         <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2 text-gray-400">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <span>Showing {filteredStreams.length} of {streams.length} formats</span>
             {filteredStreams.length !== streams.length && (
               <Badge variant="outline" className="text-xs">
@@ -269,7 +269,7 @@ export function StreamSelector({
               </Badge>
             )}
           </div>
-          <div className="text-gray-500">
+          <div className="text-muted-foreground">
             Sorted by quality and completeness
           </div>
         </div>
@@ -279,7 +279,7 @@ export function StreamSelector({
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-1 h-6 bg-green-500 rounded-full" />
-              <h4 className="text-lg font-semibold text-white">Complete Videos (Recommended)</h4>
+              <h4 className="text-lg font-semibold text-foreground">Complete Videos (Recommended)</h4>
               <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
                 Best Choice
               </Badge>
@@ -303,7 +303,7 @@ export function StreamSelector({
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-1 h-6 bg-orange-500 rounded-full" />
-              <h4 className="text-lg font-semibold text-white">Video Only (No Audio)</h4>
+              <h4 className="text-lg font-semibold text-foreground">Video Only (No Audio)</h4>
               <Badge className="bg-orange-500/20 text-orange-300 border-orange-500/30">
                 Advanced
               </Badge>
@@ -328,7 +328,7 @@ export function StreamSelector({
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-1 h-6 bg-blue-500 rounded-full" />
-              <h4 className="text-lg font-semibold text-white">Audio Only</h4>
+              <h4 className="text-lg font-semibold text-foreground">Audio Only</h4>
               <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">
                 Music
               </Badge>
@@ -407,10 +407,10 @@ function StreamCard({ stream, isRecommended, isDownloading, onDownload, type = '
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
           <div className={`w-12 h-12 ${bg} rounded-xl flex items-center justify-center shadow-lg`}>
-            <Icon className={`h-6 w-6 ${text}`} />
+            <Icon className={`h-6 w-6 ${text} dark:${text} light:${text}`} />
           </div>
           <div>
-            <h5 className="text-lg font-bold text-white mb-1">
+            <h5 className="text-lg font-bold text-foreground mb-1">
               {stream.quality.replace(/ \(.*?\)/g, '')}
             </h5>
             <div className="flex items-center gap-2">
@@ -429,15 +429,15 @@ function StreamCard({ stream, isRecommended, isDownloading, onDownload, type = '
 
       <div className="space-y-3 mb-6">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-400">Size:</span>
-          <span className="text-white font-medium">{stream.filesize}</span>
+          <span className="text-muted-foreground">Size:</span>
+          <span className="text-foreground font-medium">{stream.filesize}</span>
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-400">Codec:</span>
-          <span className="text-gray-300 text-xs">{stream.codec}</span>
+          <span className="text-muted-foreground">Codec:</span>
+          <span className="text-muted-foreground text-xs">{stream.codec}</span>
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-400">Type:</span>
+          <span className="text-muted-foreground">Type:</span>
           <span className={`flex items-center gap-1 font-medium ${typeLabel.color}`}>
             <span>{typeLabel.icon}</span>
             <span className="text-xs">{typeLabel.text}</span>
@@ -460,12 +460,12 @@ function StreamCard({ stream, isRecommended, isDownloading, onDownload, type = '
       >
         {isDownloading ? (
           <>
-            <Loader2 className="h-5 w-5 animate-spin mr-2" />
+            <Loader2 className="h-5 w-5 animate-spin mr-2 dark:text-white light:text-gray-800" />
             Downloading...
           </>
         ) : (
           <>
-            <Download className="h-5 w-5 mr-2" />
+            <Download className="h-5 w-5 mr-2 dark:text-white light:text-gray-800" />
             Download {isRecommended ? '(Best Choice)' : ''}
           </>
         )}
