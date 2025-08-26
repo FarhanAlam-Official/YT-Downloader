@@ -20,70 +20,70 @@ export function DownloadModeSelector({
   disabled = false 
 }: DownloadModeSelectorProps) {
   return (
-    <div className="space-y-4">
-      {/* Header */}
+    <div className="space-y-6 animate-fade-in-up">
+      {/* Enhanced Header */}
       <div className="text-center">
-        <h3 className="text-xl font-semibold text-white mb-2">Choose Download Method</h3>
-        <p className="text-gray-400 text-sm">
+        <h3 className="text-2xl font-serif font-bold text-white mb-3">Choose Download Method</h3>
+        <p className="text-gray-400">
           Select how you want to download your video
         </p>
       </div>
 
-      {/* Mode Selection Cards */}
-      <div className="grid md:grid-cols-2 gap-4">
+      {/* Enhanced Mode Selection Cards */}
+      <div className="grid md:grid-cols-2 gap-6">
         {/* Smart Download Mode */}
-        <Card 
-          className={`relative p-6 cursor-pointer transition-all duration-300 border-2 ${
+        <div 
+          className={`card-feature relative p-8 cursor-pointer transition-all duration-500 ${
             mode === "smart" 
-              ? "border-green-500 bg-green-500/5 ring-2 ring-green-500/20" 
-              : "border-gray-700 hover:border-green-500/50 bg-gray-900/40"
+              ? "border-success-500/50 bg-success-500/10 shadow-lg shadow-success-500/20" 
+              : "hover:border-success-500/30"
           } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           onClick={() => !disabled && onModeChange("smart")}
         >
-          {/* Recommended Badge */}
-          <div className="absolute -top-3 left-6">
-            <Badge className="bg-green-500 text-white px-3 py-1 text-xs font-medium shadow-lg">
+          {/* Enhanced Recommended Badge */}
+          <div className="absolute -top-3 left-8">
+            <div className="badge variant-success animated px-4 py-2 shadow-lg">
               ✨ Recommended
-            </Badge>
+            </div>
           </div>
 
-          <div className="space-y-4">
-            {/* Icon and Title */}
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
-                <Zap className="h-6 w-6 text-white" />
+          <div className="space-y-6">
+            {/* Enhanced Icon and Title */}
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-success-500 to-success-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <Zap className="h-7 w-7 text-white" />
               </div>
-              <div>
-                <h4 className="text-lg font-bold text-white">Smart Download</h4>
-                <p className="text-sm text-green-300">One-click best quality</p>
+              <div className="flex-1">
+                <h4 className="text-xl font-bold text-white mb-1">Smart Download</h4>
+                <p className="text-success-300 font-medium">One-click best quality</p>
               </div>
               {mode === "smart" && (
-                <CheckCircle className="h-5 w-5 text-green-500 ml-auto" />
+                <div className="checkmark w-6 h-6"></div>
               )}
             </div>
 
-            {/* Features */}
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-gray-300">
-                <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+            {/* Enhanced Features */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-gray-300">
+                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse" />
                 <span>Automatically selects highest quality</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+              <div className="flex items-center gap-3 text-gray-300">
+                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse" />
                 <span>Merges video + audio into single file</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+              <div className="flex items-center gap-3 text-gray-300">
+                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse" />
                 <span>No technical knowledge required</span>
               </div>
             </div>
 
-            {/* Action Button */}
-            <Button
-              className={`w-full ${
+            {/* Enhanced Action Button */}
+            <button
+              className={`youtube-gradient w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 ${
                 mode === "smart" 
-                  ? "bg-green-500 hover:bg-green-600" 
-                  : "bg-green-500/20 hover:bg-green-500/30 text-green-300"
+                  ? "bg-gradient-to-r from-success-500 to-success-600" 
+                  : "bg-gradient-to-r from-success-500/30 to-success-600/30 hover:from-success-500/50 hover:to-success-600/50"
               }`}
               disabled={disabled}
               onClick={(e) => {
@@ -91,57 +91,64 @@ export function DownloadModeSelector({
                 !disabled && onModeChange("smart")
               }}
             >
-              {mode === "smart" ? "Selected" : "Choose Smart Download"}
-            </Button>
+              {mode === "smart" ? (
+                <span className="flex items-center justify-center gap-2">
+                  <CheckCircle className="h-5 w-5" />
+                  Selected
+                </span>
+              ) : (
+                "Choose Smart Download"
+              )}
+            </button>
           </div>
-        </Card>
+        </div>
 
         {/* Manual Selection Mode */}
-        <Card 
-          className={`relative p-6 cursor-pointer transition-all duration-300 border-2 ${
+        <div 
+          className={`card-feature relative p-8 cursor-pointer transition-all duration-500 ${
             mode === "manual" 
-              ? "border-blue-500 bg-blue-500/5 ring-2 ring-blue-500/20" 
-              : "border-gray-700 hover:border-blue-500/50 bg-gray-900/40"
+              ? "border-info-500/50 bg-info-500/10 shadow-lg shadow-info-500/20" 
+              : "hover:border-info-500/30"
           } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           onClick={() => !disabled && onModeChange("manual")}
         >
-          <div className="space-y-4">
-            {/* Icon and Title */}
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-                <Settings className="h-6 w-6 text-white" />
+          <div className="space-y-6">
+            {/* Enhanced Icon and Title */}
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-info-500 to-info-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <Settings className="h-7 w-7 text-white" />
               </div>
-              <div>
-                <h4 className="text-lg font-bold text-white">Manual Selection</h4>
-                <p className="text-sm text-blue-300">Full control over formats</p>
+              <div className="flex-1">
+                <h4 className="text-xl font-bold text-white mb-1">Manual Selection</h4>
+                <p className="text-info-300 font-medium">Full control over formats</p>
               </div>
               {mode === "manual" && (
-                <CheckCircle className="h-5 w-5 text-blue-500 ml-auto" />
+                <div className="checkmark w-6 h-6"></div>
               )}
             </div>
 
-            {/* Features */}
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-gray-300">
-                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+            {/* Enhanced Features */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 text-gray-300">
+                <div className="w-2 h-2 bg-info-400 rounded-full" />
                 <span>Choose specific quality and format</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+              <div className="flex items-center gap-3 text-gray-300">
+                <div className="w-2 h-2 bg-info-400 rounded-full" />
                 <span>Access to all available streams</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+              <div className="flex items-center gap-3 text-gray-300">
+                <div className="w-2 h-2 bg-info-400 rounded-full" />
                 <span>Advanced options for power users</span>
               </div>
             </div>
 
-            {/* Action Button */}
-            <Button
-              className={`w-full ${
+            {/* Enhanced Action Button */}
+            <button
+              className={`btn-glass w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 ${
                 mode === "manual" 
-                  ? "bg-blue-500 hover:bg-blue-600" 
-                  : "bg-blue-500/20 hover:bg-blue-500/30 text-blue-300"
+                  ? "bg-gradient-to-r from-info-500 to-info-600 border-info-500" 
+                  : "hover:bg-info-500/20 hover:border-info-500/50"
               }`}
               disabled={disabled}
               onClick={(e) => {
@@ -149,20 +156,29 @@ export function DownloadModeSelector({
                 !disabled && onModeChange("manual")
               }}
             >
-              {mode === "manual" ? "Selected" : "Choose Manual Selection"}
-            </Button>
+              {mode === "manual" ? (
+                <span className="flex items-center justify-center gap-2">
+                  <CheckCircle className="h-5 w-5" />
+                  Selected
+                </span>
+              ) : (
+                "Choose Manual Selection"
+              )}
+            </button>
           </div>
-        </Card>
+        </div>
       </div>
 
-      {/* Info Section */}
+      {/* Enhanced Info Section */}
       {mode === "smart" && (
-        <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
-          <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
-            <div className="text-sm">
-              <p className="text-green-200 font-medium mb-1">Smart Download Process</p>
-              <p className="text-green-200/80">
+        <div className="glass-card border border-success-500/30 bg-success-500/10 rounded-2xl p-6 animate-scale-in">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-xl bg-success-500/20 flex items-center justify-center flex-shrink-0">
+              <Info className="h-5 w-5 text-success-400" />
+            </div>
+            <div>
+              <p className="text-success-200 font-semibold mb-2">Smart Download Process</p>
+              <p className="text-success-200/90 leading-relaxed">
                 We'll automatically find the best video quality, pair it with high-quality audio, 
                 and merge them into a single MP4 file ready to play anywhere.
               </p>
