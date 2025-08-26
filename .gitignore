@@ -16,6 +16,14 @@ node_modules/
 out/
 build/
 dist/
+.vercel/
+
+# Next.js cache and build files
+.next/**
+**/.next/
+**/build/
+**/dist/
+**/.vercel/
 
 # Production builds
 /build
@@ -117,6 +125,10 @@ lerna-debug.log*
 __pycache__/
 *.py[cod]
 *$py.class
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
 
 # C extensions
 *.so
@@ -388,6 +400,39 @@ secrets.json
 ffmpeg/
 ffmpeg.exe
 ffprobe.exe
+
+# IDE and editor files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Additional Python patterns
+*.egg
+*.egg-info/
+build/
+dist/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+
+# Additional Node.js patterns
+.npm
+.eslintcache
+.stylelintcache
 
 # ===========================
 # Documentation
