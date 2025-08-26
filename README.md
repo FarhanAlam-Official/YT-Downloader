@@ -169,10 +169,14 @@ selection, automatic video+audio merging, and a beautiful React frontend.
 
 Comprehensive documentation is available in the [`documentation/`](./documentation/) folder:
 
-- **[📖 API Documentation](./documentation/API_DOCUMENTATION.md)** - Complete API reference with examples
-- **[🏗️ Code Organization](./documentation/CODE_ORGANIZATION.md)** - Project structure and architecture details
-- **[⚙️ Development Setup](./documentation/DEVELOPMENT_SETUP.md)** - Detailed setup and configuration guide
-- **[🎯 Smart Download Setup](./documentation/SMART_DOWNLOAD_SETUP.md)** - FFmpeg installation and smart download configuration
+- **[📖 API Documentation](./documentation/API_DOCUMENTATION.md)** -
+  Complete API reference with examples
+- **[🏗️ Code Organization](./documentation/CODE_ORGANIZATION.md)** -
+  Project structure and architecture details
+- **[⚙️ Development Setup](./documentation/DEVELOPMENT_SETUP.md)** -
+  Detailed setup and configuration guide
+- **[🎯 Smart Download Setup](./documentation/SMART_DOWNLOAD_SETUP.md)** -
+  FFmpeg installation and smart download configuration
 
 ## 📁 Project Structure
 
