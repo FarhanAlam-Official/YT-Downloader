@@ -32,8 +32,9 @@ interface SmartDownloadButtonProps {
   videoUrl: string
   videoTitle: string
   onDownloadStart: (filename: string) => void
-  onDownloadComplete: () => void
-  onDownloadError: (error: string) => void
+  onDownloadProgress: (progress: number, stage?: string) => void
+  onDownloadComplete: (filename: string) => void
+  onDownloadError: (error: string, filename?: string) => void
   disabled?: boolean
 }
 
@@ -52,6 +53,7 @@ export function SmartDownloadButton({
   videoUrl,
   videoTitle,
   onDownloadStart,
+  onDownloadProgress,
   onDownloadComplete,
   onDownloadError,
   disabled = false
@@ -97,6 +99,7 @@ export function SmartDownloadButton({
     try {
       setError(null)
       setProgress(0)
+      setDownloadStage("analyzing")
       
       const sanitizedTitle = videoTitle
         .replace(/[^a-zA-Z0-9\s-_]/g, "")
@@ -114,9 +117,13 @@ export function SmartDownloadButton({
           setDownloadStage(progressInfo.stage)
           setProgress(progressInfo.progress)
           
+          // Report progress to parent component
+          onDownloadProgress(progressInfo.progress, progressInfo.stage)
+          
           if (progressInfo.error) {
             setError(progressInfo.error)
-            onDownloadError(progressInfo.error)
+            onDownloadError(progressInfo.error, filename)
+            return
           }
         }
       )
@@ -134,13 +141,19 @@ export function SmartDownloadButton({
         document.body.removeChild(a)
       }, 100)
 
-      onDownloadComplete()
+      // Ensure completion is reported
+      if (downloadStage !== "complete") {
+        setDownloadStage("complete")
+        setProgress(100)
+      }
+      onDownloadComplete(filename)
       
     } catch (error) {
       const errorMessage = error instanceof YouTubeApiError ? error.message : "Download failed"
       setError(errorMessage)
       setDownloadStage("error")
-      onDownloadError(errorMessage)
+      setProgress(0)
+      onDownloadError(errorMessage, __filename)
     }
   }
 

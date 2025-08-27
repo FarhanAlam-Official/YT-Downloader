@@ -14,8 +14,9 @@ interface StreamSelectorProps {
   videoUrl: string
   videoTitle: string // Added videoTitle prop for proper naming
   onDownloadStart: (streamId: string, filename: string) => void
-  onDownloadComplete: (streamId: string) => void
-  onDownloadError: (streamId: string, error: string) => void
+  onDownloadProgress: (streamId: string, progress: number, stage?: string) => void
+  onDownloadComplete: (streamId: string, filename: string) => void
+  onDownloadError: (streamId: string, error: string, filename?: string) => void
 }
 
 export function StreamSelector({
@@ -23,6 +24,7 @@ export function StreamSelector({
   videoUrl,
   videoTitle,
   onDownloadStart,
+  onDownloadProgress,
   onDownloadComplete,
   onDownloadError,
 }: StreamSelectorProps) {
@@ -46,9 +48,30 @@ export function StreamSelector({
 
     onDownloadStart(streamId, filename)
 
-    try {
-      const blob = await downloadVideo(videoUrl, streamId, filename)
+    let progressInterval: NodeJS.Timeout | null = null
 
+    try {
+      // Start progress simulation for manual downloads
+      let currentProgress = 5
+      onDownloadProgress(streamId, currentProgress, "downloading")
+      
+      progressInterval = setInterval(() => {
+        if (currentProgress < 85) {
+          currentProgress += Math.random() * 10 + 5 // Random increment between 5-15
+          currentProgress = Math.min(currentProgress, 85) // Cap at 85%
+          onDownloadProgress(streamId, Math.round(currentProgress), "downloading")
+        }
+      }, 400) // Update every 400ms
+      
+      // Start the actual download
+      const blob = await downloadVideo(videoUrl, streamId, filename)
+      
+      // Stop progress simulation and complete download
+      if (progressInterval) {
+        clearInterval(progressInterval)
+        progressInterval = null
+      }
+      
       // Create download link and trigger download
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement("a")
@@ -61,15 +84,23 @@ export function StreamSelector({
         window.URL.revokeObjectURL(url)
         document.body.removeChild(a)
       }, 100)
-
-      onDownloadComplete(streamId)
+      
+      // Notify completion
+      onDownloadComplete(streamId, filename)
+      
     } catch (error) {
+      // Make sure to clear any running progress interval on error
+      if (progressInterval) {
+        clearInterval(progressInterval)
+        progressInterval = null
+      }
+      
       let errorMessage = "Download failed. Please try again."
       if (error instanceof YouTubeApiError) {
         errorMessage = error.message
       }
       setError(errorMessage)
-      onDownloadError(streamId, errorMessage)
+      onDownloadError(streamId, errorMessage, filename)
       console.error("Download error:", error)
     } finally {
       setDownloadingStreams((prev: Set<string>) => {
