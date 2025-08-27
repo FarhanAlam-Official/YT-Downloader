@@ -219,6 +219,10 @@ export async function smartDownload(
   onProgress?: (progress: SmartDownloadProgress) => void
 ): Promise<Blob> {
   try {
+    if (onProgress) {
+      onProgress({ stage: 'analyzing', progress: 10, message: 'Analyzing video streams...' })
+    }
+    
     // Start download request
     const response = await fetch(`${API_BASE}/api/smart-download`, {
       method: "POST",
@@ -238,32 +242,51 @@ export async function smartDownload(
       throw new YouTubeApiError(errorData.detail, response.status)
     }
 
-    // For now, we'll simulate progress since the backend doesn't support streaming progress yet
-    // In a real implementation, you'd use Server-Sent Events or WebSockets
+    // For progress tracking, we'll simulate progress based on typical download behavior
     if (onProgress) {
-      onProgress({ stage: 'analyzing', progress: 10, message: 'Analyzing video streams...' })
+      let currentProgress = 15
+      let currentStage: SmartDownloadProgress['stage'] = 'downloading-video'
+      let progressMessage = 'Downloading video...'
       
-      // Simulate progress updates
-      setTimeout(() => {
-        onProgress({ stage: 'downloading-video', progress: 30, message: 'Downloading video...' })
-      }, 500)
+      // Create more realistic progress simulation
+      const progressInterval = setInterval(() => {
+        if (currentProgress < 90) {
+          // Slower progress at the beginning, faster in the middle
+          const increment = currentProgress < 30 ? Math.random() * 5 + 2 : 
+                           currentProgress < 70 ? Math.random() * 8 + 4 :
+                           Math.random() * 4 + 1
+          
+          currentProgress += increment
+          currentProgress = Math.min(currentProgress, 90) // Cap at 90%
+          
+          // Update stage based on progress
+          if (currentProgress > 20 && currentProgress <= 50) {
+            currentStage = 'downloading-video'
+            progressMessage = 'Downloading video stream...'
+          } else if (currentProgress > 50 && currentProgress <= 75) {
+            currentStage = 'downloading-audio'
+            progressMessage = 'Downloading audio stream...'
+          } else if (currentProgress > 75) {
+            currentStage = 'merging'
+            progressMessage = 'Merging video and audio...'
+          }
+          
+          onProgress({ stage: currentStage, progress: Math.round(currentProgress), message: progressMessage })
+        }
+      }, 500) // Update every 500ms for smoother progress
       
-      setTimeout(() => {
-        onProgress({ stage: 'downloading-audio', progress: 60, message: 'Downloading audio...' })
-      }, 1500)
+      // Wait for the actual blob download
+      const blob = await response.blob()
       
-      setTimeout(() => {
-        onProgress({ stage: 'merging', progress: 85, message: 'Merging video and audio...' })
-      }, 2500)
-    }
-
-    const blob = await response.blob()
-    
-    if (onProgress) {
+      // Clear the interval and set completion
+      clearInterval(progressInterval)
       onProgress({ stage: 'complete', progress: 100, message: 'Download complete!' })
+      
+      return blob
+    } else {
+      // No progress callback, just return the blob
+      return await response.blob()
     }
-    
-    return blob
   } catch (error) {
     if (onProgress) {
       const errorMessage = error instanceof YouTubeApiError ? error.message : 'Download failed'
