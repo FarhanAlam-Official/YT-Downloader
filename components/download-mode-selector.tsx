@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
+import { RecommendedBadge } from "@/components/recommended-badge"
 import { Zap, Settings, CheckCircle, Info } from "lucide-react"
 
 export type DownloadMode = "smart" | "manual"
@@ -20,7 +21,7 @@ export function DownloadModeSelector({
   disabled = false 
 }: DownloadModeSelectorProps) {
   return (
-    <div className="space-y-6 animate-fade-in-up">
+    <div className="space-y-6 animate-fade-in-up overflow-visible">
       {/* Enhanced Header */}
       <div className="text-center">
         <h3 className="text-2xl font-serif font-bold text-white mb-3">Choose Download Method</h3>
@@ -30,50 +31,49 @@ export function DownloadModeSelector({
       </div>
 
       {/* Enhanced Mode Selection Cards */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 pt-8 overflow-visible">
         {/* Smart Download Mode */}
+        <div className="relative overflow-visible">
         <div 
-          className={`card-feature relative p-8 cursor-pointer transition-all duration-500 ${
+          className={`card-feature relative p-6 sm:p-8 cursor-pointer transition-all duration-500 !overflow-visible ${
             mode === "smart" 
               ? "border-success-500/50 bg-success-500/10 shadow-lg shadow-success-500/20" 
               : "hover:border-success-500/30"
           } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           onClick={() => !disabled && onModeChange("smart")}
         >
-          {/* Enhanced Recommended Badge */}
-          <div className="absolute -top-3 left-8">
-            <div className="badge variant-success animated px-4 py-2 shadow-lg">
-              ✨ Recommended
-            </div>
+          {/* Recommended Badge - 50% overlapping the top-left corner */}
+          <div className="absolute -top-5 -left-5 sm:-top-6 sm:-left-6 z-30">
+            <RecommendedBadge animated={true} />
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Enhanced Icon and Title */}
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-success-500 to-success-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Zap className="h-7 w-7 text-white" />
+            <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-col sm:flex-row">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-success-500 to-success-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
+                <Zap className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
               </div>
-              <div className="flex-1">
-                <h4 className="text-xl font-bold text-white mb-1">Smart Download</h4>
-                <p className="text-success-300 font-medium">One-click best quality</p>
+              <div className="flex-1 text-center sm:text-left">
+                <h4 className="text-lg sm:text-xl font-bold text-white mb-1">Smart Download</h4>
+                <p className="text-success-300 font-medium text-sm sm:text-base">One-click best quality</p>
               </div>
               {mode === "smart" && (
-                <div className="checkmark w-6 h-6"></div>
+                <div className="checkmark w-5 h-5 sm:w-6 sm:h-6 self-center"></div>
               )}
             </div>
 
             {/* Enhanced Features */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse" />
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex items-center gap-3 text-gray-300 text-sm">
+                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse flex-shrink-0" />
                 <span>Automatically selects highest quality</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse" />
+              <div className="flex items-center gap-3 text-gray-300 text-sm">
+                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse flex-shrink-0" />
                 <span>Merges video + audio into single file</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse" />
+              <div className="flex items-center gap-3 text-gray-300 text-sm">
+                <div className="w-2 h-2 bg-success-400 rounded-full animate-pulse flex-shrink-0" />
                 <span>No technical knowledge required</span>
               </div>
             </div>
@@ -102,43 +102,44 @@ export function DownloadModeSelector({
             </button>
           </div>
         </div>
+        </div>
 
         {/* Manual Selection Mode */}
         <div 
-          className={`card-feature relative p-8 cursor-pointer transition-all duration-500 ${
+          className={`card-feature relative p-6 sm:p-8 cursor-pointer transition-all duration-500 ${
             mode === "manual" 
               ? "border-info-500/50 bg-info-500/10 shadow-lg shadow-info-500/20" 
               : "hover:border-info-500/30"
           } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           onClick={() => !disabled && onModeChange("manual")}
         >
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Enhanced Icon and Title */}
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-info-500 to-info-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Settings className="h-7 w-7 text-white" />
+            <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-col sm:flex-row">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-info-500 to-info-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
+                <Settings className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
               </div>
-              <div className="flex-1">
-                <h4 className="text-xl font-bold text-white mb-1">Manual Selection</h4>
-                <p className="text-info-300 font-medium">Full control over formats</p>
+              <div className="flex-1 text-center sm:text-left">
+                <h4 className="text-lg sm:text-xl font-bold text-white mb-1">Manual Selection</h4>
+                <p className="text-info-300 font-medium text-sm sm:text-base">Full control over formats</p>
               </div>
               {mode === "manual" && (
-                <div className="checkmark w-6 h-6"></div>
+                <div className="checkmark w-5 h-5 sm:w-6 sm:h-6 self-center"></div>
               )}
             </div>
 
             {/* Enhanced Features */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-info-400 rounded-full" />
+            <div className="space-y-2 sm:space-y-3">
+              <div className="flex items-center gap-3 text-gray-300 text-sm">
+                <div className="w-2 h-2 bg-info-400 rounded-full flex-shrink-0" />
                 <span>Choose specific quality and format</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-info-400 rounded-full" />
+              <div className="flex items-center gap-3 text-gray-300 text-sm">
+                <div className="w-2 h-2 bg-info-400 rounded-full flex-shrink-0" />
                 <span>Access to all available streams</span>
               </div>
-              <div className="flex items-center gap-3 text-gray-300">
-                <div className="w-2 h-2 bg-info-400 rounded-full" />
+              <div className="flex items-center gap-3 text-gray-300 text-sm">
+                <div className="w-2 h-2 bg-info-400 rounded-full flex-shrink-0" />
                 <span>Advanced options for power users</span>
               </div>
             </div>
