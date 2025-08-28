@@ -59,25 +59,30 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
     setTimeout(onRemove, 300) // Wait for animation
   }
 
-  const getToastStyles = () => {
-    switch (toast.type) {
-      case "success":
-        return "bg-gradient-to-r from-success-500/90 to-success-600/90 border-success-500/50"
-      case "error":
-        return "bg-gradient-to-r from-error-500/90 to-error-600/90 border-error-500/50"
-      default:
-        return "bg-gradient-to-r from-info-500/90 to-info-600/90 border-info-500/50"
-    }
-  }
+  // Neutral, theme-aware surface; colors are applied via accent bar + icon bg
+  const getToastStyles = () => "bg-background/95 border-border text-foreground"
 
+  const colorBg = toast.type === 'success' ? 'bg-success-400/25' : toast.type === 'error' ? 'bg-error-400/25' : 'bg-info-400/25'
   const getIcon = () => {
     switch (toast.type) {
       case "success":
-        return <CheckCircle className="h-5 w-5 text-white" />
+        return (
+          <div className={`w-7 h-7 rounded-lg ${colorBg} flex items-center justify-center`}>
+            <CheckCircle className="h-4 w-4 text-white" />
+          </div>
+        )
       case "error":
-        return <AlertCircle className="h-5 w-5 text-white" />
+        return (
+          <div className={`w-7 h-7 rounded-lg ${colorBg} flex items-center justify-center`}>
+            <AlertCircle className="h-4 w-4 text-white" />
+          </div>
+        )
       default:
-        return <Download className="h-5 w-5 text-white" />
+        return (
+          <div className={`w-7 h-7 rounded-lg ${colorBg} flex items-center justify-center`}>
+            <Download className="h-4 w-4 text-white" />
+          </div>
+        )
     }
   }
 
@@ -87,34 +92,50 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
         isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
       } ${getToastStyles()}`}
     >
+      {/* Accent border based on type */}
+      <div className={`absolute inset-0 pointer-events-none`}> 
+        <div className={`absolute left-0 top-0 h-full w-1
+          ${toast.type === 'success' ? 'bg-success-400/80' : toast.type === 'error' ? 'bg-error-400/80' : 'bg-info-400/80'}`}/>
+      </div>
+
+      {/* Shine */}
+      {/* subtle diagonal highlight */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent" />
+      </div>
+
       <div className="p-4">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 mt-0.5">
             {getIcon()}
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="text-sm font-semibold text-white mb-1">
+            <h4 className="text-sm font-semibold mb-1 flex items-center gap-2">
               {toast.title}
+              <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold tracking-wide uppercase border
+                ${toast.type === 'success' ? 'bg-success-500/15 border-success-500/30 text-success-600 dark:text-success-300' : toast.type === 'error' ? 'bg-error-500/15 border-error-500/30 text-error-600 dark:text-error-300' : 'bg-info-500/15 border-info-500/30 text-info-600 dark:text-info-300'}`}>
+                {toast.type === 'success' ? 'Completed' : toast.type === 'error' ? 'Failed' : 'Starting'}
+              </span>
             </h4>
-            <p className="text-xs text-white/90 leading-relaxed">
+            <p className="text-xs text-muted-foreground leading-relaxed">
               {toast.message}
             </p>
           </div>
           <button
             onClick={handleRemove}
-            className="flex-shrink-0 w-6 h-6 rounded-lg bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors duration-200"
+            className="flex-shrink-0 w-6 h-6 rounded-lg bg-foreground/10 hover:bg-foreground/20 flex items-center justify-center transition-colors duration-200"
             aria-label="Close notification"
           >
-            <X className="h-3 w-3 text-white" />
+            <X className="h-3 w-3 text-foreground" />
           </button>
         </div>
       </div>
       
       {/* Progress bar for auto-dismiss */}
       {toast.duration && (
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-foreground/10">
           <div
-            className="h-full bg-white/50 transition-all duration-300 ease-linear"
+            className={`h-full transition-all duration-300 ease-linear ${toast.type === 'success' ? 'bg-success-500/60' : toast.type === 'error' ? 'bg-error-500/60' : 'bg-info-500/60'}`}
             style={{
               animation: `shrink ${toast.duration}ms linear forwards`
             }}
