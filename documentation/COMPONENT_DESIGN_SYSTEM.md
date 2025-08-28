@@ -11,30 +11,59 @@ This document defines the comprehensive component design system for YT-Downloade
 ```css
 :root {
   /* Primary Brand Palette */
-  --color-brand-50: #fef2f2;
-  --color-brand-100: #fee2e2;
-  --color-brand-200: #fecaca;
-  --color-brand-300: #fca5a5;
-  --color-brand-400: #f87171;
-  --color-brand-500: #ef4444; /* YouTube Red Base */
-  --color-brand-600: #dc2626;
-  --color-brand-700: #b91c1c;
-  --color-brand-800: #991b1b;
-  --color-brand-900: #7f1d1d;
+  --color-brand-red-50: #fef2f2;
+  --color-brand-red-100: #fee2e2;
+  --color-brand-red-200: #fecaca;
+  --color-brand-red-300: #fca5a5;
+  --color-brand-red-400: #f87171;
+  --color-brand-red-500: #ef4444; /* YouTube Red Base */
+  --color-brand-red-600: #dc2626;
+  --color-brand-red-700: #b91c1c;
+  --color-brand-red-800: #991b1b;
+  --color-brand-red-900: #7f1d1d;
 
+  /* Enhanced YouTube Brand Colors */
+  --color-youtube-red: #ff0000;
+  --color-youtube-red-hover: #cc0000;
+  --color-youtube-red-light: #ff3333;
+  --color-youtube-red-dark: #b30000;
+  --color-youtube-dark: #0f0f0f;
+  --color-youtube-card: #1c1c1c;
+  --color-youtube-card-hover: #272727;
+  --color-youtube-text-primary: #ffffff;
+  --color-youtube-text-secondary: #aaaaaa;
+  --color-youtube-text-tertiary: #666666;
+  --color-youtube-border: #303030;
+  --color-youtube-border-light: #404040;
+  
   /* Semantic Colors */
-  --color-success: #00D084;
-  --color-warning: #FF8C00;
-  --color-error: #FF4444;
-  --color-info: #3B82F6;
-
-  /* Surface Colors */
+  --color-success-50: #ecfdf5;
+  --color-success-500: #00B877;  /* Darker, more readable green */
+  --color-success-900: #064e3b;
+  --color-success-foreground: #047857;  /* More vivid green for better readability */
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #FF8C00;
+  --color-warning-900: #78350f;
+  --color-warning-foreground: #78350f;
+  --color-error-50: #fef2f2;
+  --color-error-500: #FF4444;
+  --color-error-900: #7f1d1d;
+  --color-error-foreground: #7f1d1d;
+  --color-info-50: #eff6ff;
+  --color-info-500: #3B82F6;
+  --color-info-900: #1e3a8a;
+  --color-info-foreground: #1e3a8a;
+  
+  /* Additional semantic colors for light theme */
+  --color-amber-foreground: #92400e;
+  --color-orange-foreground: #c2410c;
+  --color-blue-foreground: #1e40af;
+  
+  /* Surface & Text Colors */
   --color-surface-primary: #0F0F0F;
   --color-surface-secondary: #1C1C1C;
   --color-surface-tertiary: #272727;
   --color-surface-elevated: #383838;
-
-  /* Text Colors */
   --color-text-primary: #FFFFFF;
   --color-text-secondary: #AAAAAA;
   --color-text-tertiary: #666666;
@@ -42,59 +71,154 @@ This document defines the comprehensive component design system for YT-Downloade
 }
 ```
 
-### Spacing Scale
+### Enhanced Spacing Scale
 
 ```css
 :root {
-  /* Spacing Scale (rem units) */
+  /* Enhanced Spacing Scale (rem units) */
   --space-0: 0;
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-5: 1.25rem;   /* 20px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
-  --space-16: 4rem;     /* 64px */
-  --space-20: 5rem;     /* 80px */
-  --space-24: 6rem;     /* 96px */
+  --space-px: 1px;
+  --space-0-5: 0.125rem;  /* 2px */
+  --space-1: 0.25rem;     /* 4px */
+  --space-1-5: 0.375rem;  /* 6px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-2-5: 0.625rem;  /* 10px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-3-5: 0.875rem;  /* 14px */
+  --space-4: 1rem;        /* 16px */
+  --space-5: 1.25rem;     /* 20px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-7: 1.75rem;     /* 28px */
+  --space-8: 2rem;        /* 32px */
+  --space-9: 2.25rem;     /* 36px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-11: 2.75rem;    /* 44px */
+  --space-12: 3rem;       /* 48px */
+  --space-14: 3.5rem;     /* 56px */
+  --space-16: 4rem;       /* 64px */
+  --space-20: 5rem;       /* 80px */
+  --space-24: 6rem;       /* 96px */
+  --space-28: 7rem;       /* 112px */
+  --space-32: 8rem;       /* 128px */
+  --space-36: 9rem;       /* 144px */
+  --space-40: 10rem;      /* 160px */
+  --space-44: 11rem;      /* 176px */
+  --space-48: 12rem;      /* 192px */
+  --space-52: 13rem;      /* 208px */
+  --space-56: 14rem;      /* 224px */
+  --space-60: 15rem;      /* 240px */
+  --space-64: 16rem;      /* 256px */
+  --space-72: 18rem;      /* 288px */
+  --space-80: 20rem;      /* 320px */
+  --space-96: 24rem;      /* 384px */
 }
 ```
 
-### Border Radius Scale
+### Enhanced Border Radius Scale
 
 ```css
 :root {
   --radius-none: 0;
-  --radius-sm: 0.375rem;    /* 6px */
-  --radius-md: 0.5rem;      /* 8px */
-  --radius-lg: 0.75rem;     /* 12px */
-  --radius-xl: 1rem;        /* 16px */
-  --radius-2xl: 1.25rem;    /* 20px */
+  --radius-sm: 0.375rem;      /* 6px */
+  --radius-md: 0.5rem;        /* 8px */
+  --radius-lg: 0.75rem;       /* 12px */
+  --radius-xl: 1rem;          /* 16px */
+  --radius-2xl: 1.25rem;      /* 20px */
+  --radius-3xl: 1.5rem;       /* 24px */
+  --radius-4xl: 2rem;         /* 32px */
   --radius-full: 9999px;
 }
 ```
 
-### Shadow Scale
+### Enhanced Shadow Scale
 
 ```css
 :root {
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
-  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.25);
-  --shadow-2xl: 0 16px 32px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 20px rgba(255, 0, 0, 0.3);
+  --shadow-none: 0 0 #0000;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  
+  /* Colored Shadows */
+  --shadow-brand: 0 8px 32px rgba(239, 68, 68, 0.3);
+  --shadow-success: 0 8px 32px rgba(0, 208, 132, 0.3);
+  --shadow-warning: 0 8px 32px rgba(255, 140, 0, 0.3);
+  --shadow-error: 0 8px 32px rgba(255, 68, 68, 0.3);
+  --shadow-info: 0 8px 32px rgba(59, 130, 246, 0.3);
+  
+  /* Glassmorphism Shadows */
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --shadow-glass-lg: 0 12px 40px 0 rgba(31, 38, 135, 0.4);
 }
 ```
 
-## Enhanced Button System
+## Enhanced Component System
 
-### Button Variants
+### Navbar Component
 
-#### Primary Button (Smart Download)
+The Navbar component provides consistent navigation across the application with the following features:
+
+- Responsive design with mobile-friendly hamburger menu
+- Logo with brand identity
+- Navigation links to key pages (Home, About)
+- Theme toggle for light/dark mode
+- Sticky positioning for easy access
+
+```tsx
+interface NavbarProps {
+  // No props required - uses Next.js routing
+}
+```
+
+```css
+/* Navbar Styles */
+.navbar {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background)/95;
+  backdrop-filter: blur(12px);
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-lg);
+}
+```
+
+### Footer Component
+
+The Footer component provides comprehensive information and links at the bottom of pages:
+
+- Brand information with logo
+- Feature highlights
+- Quick navigation links
+- Legal information
+- Social media links
+- Copyright and disclaimer
+
+```tsx
+interface FooterProps {
+  // No props required
+}
+```
+
+```css
+/* Footer Styles */
+.footer {
+  background: var(--color-youtube-card);
+  border-top: 1px solid var(--color-border);
+  margin-top: 5rem;
+  padding: 3rem 0;
+}
+```
+
+### Enhanced Button System
+
+#### Button Variants
+
+##### Primary Button (Smart Download)
 
 ```typescript
 interface ButtonProps {
@@ -110,7 +234,7 @@ interface ButtonProps {
 /* Primary Button Styles */
 .btn-primary {
   /* Base Styles */
-  background: linear-gradient(135deg, var(--color-success) 0%, #00B874 100%);
+  background: linear-gradient(135deg, var(--color-success-500) 0%, #00B874 100%);
   border: none;
   border-radius: var(--radius-xl);
   color: white;
@@ -129,7 +253,7 @@ interface ButtonProps {
   /* Interaction States */
   &:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-xl), 0 0 20px rgba(0, 208, 132, 0.3);
+    box-shadow: var(--shadow-xl), var(--shadow-success);
   }
 
   &:active {
@@ -138,7 +262,7 @@ interface ButtonProps {
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-success);
+    outline: 2px solid var(--color-success-500);
     outline-offset: 2px;
   }
 
@@ -180,7 +304,7 @@ interface ButtonProps {
 }
 ```
 
-#### Secondary Button (Manual Selection)
+##### Secondary Button (Manual Selection)
 
 ```css
 .btn-secondary {
@@ -188,6 +312,7 @@ interface ButtonProps {
   border: 2px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(12px);
   color: var(--color-text-primary);
+  border-radius: var(--radius-xl);
   
   &:hover {
     background: rgba(255, 255, 255, 0.08);
@@ -197,539 +322,115 @@ interface ButtonProps {
 }
 ```
 
-#### Ghost Button (Subtle Actions)
+##### Ghost Button (Subtle Actions)
 
 ```css
 .btn-ghost {
   background: transparent;
   border: none;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+  padding: var(--space-2) var(--space-4);
   
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--color-text-primary);
+    background: rgba(255, 255, 255, 0.1);
   }
 }
 ```
 
-### Button Micro-Interactions
-
-#### Ripple Effect
-
-```typescript
-const useRipple = () => {
-  const createRipple = (event: React.MouseEvent<HTMLElement>) => {
-    const button = event.currentTarget;
-    const rect = button.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = event.clientX - rect.left - size / 2;
-    const y = event.clientY - rect.top - size / 2;
-    
-    const ripple = document.createElement('span');
-    ripple.style.cssText = `
-      position: absolute;
-      width: ${size}px;
-      height: ${size}px;
-      left: ${x}px;
-      top: ${y}px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(0);
-      animation: ripple 600ms ease-out;
-      pointer-events: none;
-    `;
-    
-    button.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 600);
-  };
-  
-  return createRipple;
-};
-```
-
-## Enhanced Card System
-
-### Card Variants
+### Enhanced Card System
 
 #### Glassmorphism Card
 
 ```css
-.card-glass {
-  /* Base Glassmorphism */
+.youtube-card {
   background: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.08) 0%, 
-    rgba(255, 255, 255, 0.03) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-2xl);
-  box-shadow: 
-    var(--shadow-lg),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
-  /* Hover Enhancement */
+  box-shadow: var(--shadow-xl), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 
-      var(--shadow-2xl),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.2);
-  }
+}
 
-  /* Focus State */
-  &:focus-within {
-    outline: 2px solid var(--color-brand-500);
-    outline-offset: 2px;
-  }
+.light .youtube-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 ```
 
-#### Feature Card (Download Options)
+### Enhanced Input System
+
+#### YouTube-inspired Input Field
 
 ```css
-.card-feature {
-  background: rgba(28, 28, 28, 0.95);
-  border: 2px solid transparent;
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-
-  /* Gradient Border Effect */
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    padding: 2px;
-    background: linear-gradient(135deg, var(--color-success), var(--color-info));
-    border-radius: inherit;
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: subtract;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  &:hover::before {
-    opacity: 1;
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
-  }
-}
-```
-
-### Card Animation Patterns
-
-#### Stagger Animation
-
-```typescript
-const useStaggerAnimation = (itemCount: number, delay: number = 100) => {
-  useEffect(() => {
-    const items = document.querySelectorAll('.stagger-item');
-    items.forEach((item, index) => {
-      (item as HTMLElement).style.animationDelay = `${index * delay}ms`;
-      item.classList.add('animate-fade-in-up');
-    });
-  }, [itemCount, delay]);
-};
-```
-
-```css
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out both;
-}
-```
-
-## Enhanced Input System
-
-### Input Variants
-
-#### URL Input Field
-
-```css
-.input-url {
-  /* Base Styling */
+.youtube-input {
   background: rgba(28, 28, 28, 0.9);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
-  padding: var(--space-5) var(--space-6);
-  font-size: 1.125rem;
   color: var(--color-text-primary);
-  width: 100%;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-
-  /* Placeholder Styling */
-  &::placeholder {
-    color: var(--color-text-tertiary);
-    transition: color 0.3s ease;
-  }
-
-  /* Focus State */
-  &:focus {
-    outline: none;
-    border-color: var(--color-brand-500);
-    background: rgba(28, 28, 28, 1);
-    box-shadow: 
-      0 0 0 4px rgba(255, 0, 0, 0.1),
-      var(--shadow-lg);
-    transform: scale(1.01);
-  }
-
-  &:focus::placeholder {
-    color: transparent;
-  }
-
-  /* Valid State */
-  &:valid {
-    border-color: var(--color-success);
-  }
-
-  /* Invalid State */
-  &:invalid:not(:placeholder-shown) {
-    border-color: var(--color-error);
-    animation: shake 0.5s ease-in-out;
-  }
+  padding: var(--space-4) var(--space-6);
+  font-size: 1rem;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-```
-
-#### Search Input with Icon
-
-```typescript
-interface SearchInputProps {
-  placeholder?: string;
-  icon?: React.ReactNode;
-  onSearch?: (value: string) => void;
-  loading?: boolean;
+.light .youtube-input {
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  color: var(--color-text-primary);
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({
-  placeholder = "Search...",
-  icon,
-  onSearch,
-  loading
-}) => {
-  const [value, setValue] = useState('');
-  
-  return (
-    <div className="input-container">
-      {icon && <div className="input-icon">{icon}</div>}
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={placeholder}
-        className="input-search"
-      />
-      {loading && <div className="input-spinner">
-        <Loader2 className="animate-spin" />
-      </div>}
-    </div>
-  );
-};
-```
-
-```css
-.input-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+.youtube-input:focus {
+  border-color: var(--color-brand-red-500);
+  background: var(--color-surface-secondary);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1), var(--shadow-lg);
+  transform: scale(1.01);
 }
 
-.input-icon {
-  position: absolute;
-  left: var(--space-4);
-  z-index: 1;
+.light .youtube-input:focus {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15), 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.youtube-input::placeholder {
   color: var(--color-text-tertiary);
   transition: color 0.3s ease;
 }
 
-.input-search {
-  padding-left: var(--space-12);
-  /* ... other input styles */
-}
-
-.input-container:focus-within .input-icon {
-  color: var(--color-brand-500);
-}
-
-.input-spinner {
-  position: absolute;
-  right: var(--space-4);
-  color: var(--color-brand-500);
-}
-```
-
-## Progress & Status Components
-
-### Enhanced Progress Bar
-
-```typescript
-interface ProgressProps {
-  value: number;
-  max?: number;
-  stages?: Array<{
-    label: string;
-    color: string;
-    threshold: number;
-  }>;
-  showPercentage?: boolean;
-  animated?: boolean;
-}
-```
-
-```css
-.progress-enhanced {
-  /* Container */
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-full);
-  height: 12px;
-  overflow: hidden;
-  position: relative;
-
-  /* Progress Fill */
-  &__fill {
-    height: 100%;
-    border-radius: inherit;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(90deg, var(--color-success), var(--color-info));
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Animated Stripe */
-  &__fill.animated::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 8px,
-      rgba(255, 255, 255, 0.1) 8px,
-      rgba(255, 255, 255, 0.1) 16px
-    );
-    animation: progress-stripes 1s linear infinite;
-  }
-
-  /* Stage Indicators */
-  &__stages {
-    position: absolute;
-    top: -8px;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  &__stage {
-    width: 4px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    transition: background-color 0.3s ease;
-  }
-
-  &__stage.completed {
-    background: var(--color-success);
-  }
-}
-
-@keyframes progress-stripes {
-  0% { transform: translateX(-16px); }
-  100% { transform: translateX(16px); }
-}
-```
-
-### Status Badge System
-
-```typescript
-interface BadgeProps {
-  variant: 'success' | 'warning' | 'error' | 'info' | 'neutral';
-  size?: 'sm' | 'md' | 'lg';
-  animated?: boolean;
-  icon?: React.ReactNode;
-  children: React.ReactNode;
-}
-```
-
-```css
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  border-radius: var(--radius-full);
-  font-weight: 500;
-  transition: all 0.3s ease;
-
-  /* Size Variants */
-  &.size-sm { padding: var(--space-1) var(--space-3); font-size: 0.75rem; }
-  &.size-md { padding: var(--space-2) var(--space-4); font-size: 0.875rem; }
-  &.size-lg { padding: var(--space-3) var(--space-5); font-size: 1rem; }
-
-  /* Color Variants */
-  &.variant-success {
-    background: rgba(0, 208, 132, 0.15);
-    color: var(--color-success);
-    border: 1px solid rgba(0, 208, 132, 0.3);
-  }
-
-  &.variant-warning {
-    background: rgba(255, 140, 0, 0.15);
-    color: var(--color-warning);
-    border: 1px solid rgba(255, 140, 0, 0.3);
-  }
-
-  &.variant-error {
-    background: rgba(255, 68, 68, 0.15);
-    color: var(--color-error);
-    border: 1px solid rgba(255, 68, 68, 0.3);
-  }
-
-  /* Animated Pulse */
-  &.animated {
-    animation: badge-pulse 2s infinite;
-  }
-}
-
-@keyframes badge-pulse {
-  0%, 100% { 
-    box-shadow: 0 0 0 0 currentColor; 
-    opacity: 1; 
-  }
-  50% { 
-    box-shadow: 0 0 0 4px transparent; 
-    opacity: 0.8; 
-  }
+.youtube-input:focus::placeholder {
+  color: transparent;
 }
 ```
 
 ## Micro-Interaction Patterns
 
-### Hover Animations
-
-#### Magnetic Effect
-
-```typescript
-const useMagnetic = (strength: number = 0.5) => {
-  const ref = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = element.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      
-      element.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-    };
-
-    const handleMouseLeave = () => {
-      element.style.transform = 'translate(0, 0)';
-    };
-
-    element.addEventListener('mousemove', handleMouseMove);
-    element.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      element.removeEventListener('mousemove', handleMouseMove);
-      element.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, [strength]);
-
-  return ref;
-};
-```
-
-#### Tilt Effect
-
-```css
-.tilt-effect {
-  transition: transform 0.3s ease;
-  transform-style: preserve-3d;
-}
-
-.tilt-effect:hover {
-  transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
-}
-```
-
 ### Loading States
 
-#### Skeleton Loading
-
-```css
-.skeleton {
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0.1) 25%, 
-    rgba(255, 255, 255, 0.2) 50%, 
-    rgba(255, 255, 255, 0.1) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-loading 2s infinite;
-  border-radius: var(--radius-md);
-}
-
-@keyframes skeleton-loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* Skeleton Variants */
-.skeleton-text { height: 1rem; width: 100%; }
-.skeleton-title { height: 1.5rem; width: 70%; }
-.skeleton-button { height: 2.5rem; width: 8rem; }
-.skeleton-avatar { width: 3rem; height: 3rem; border-radius: 50%; }
-```
-
-#### Pulsing Loader
+#### Pulse Loader
 
 ```css
 .pulse-loader {
-  display: inline-flex;
-  gap: var(--space-1);
+  display: flex;
+  gap: 4px;
+  align-items: center;
 }
 
 .pulse-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--color-brand-500);
-  animation: pulse-dot 1.4s infinite ease-in-out;
+  background: var(--color-info-500);
+  animation: pulse 1.5s infinite ease-in-out;
 }
 
 .pulse-dot:nth-child(1) { animation-delay: -0.32s; }
 .pulse-dot:nth-child(2) { animation-delay: -0.16s; }
-.pulse-dot:nth-child(3) { animation-delay: 0; }
 
-@keyframes pulse-dot {
+@keyframes pulse {
   0%, 80%, 100% {
-    transform: scale(0.6);
+    transform: scale(0);
     opacity: 0.5;
   }
   40% {
@@ -739,83 +440,153 @@ const useMagnetic = (strength: number = 0.5) => {
 }
 ```
 
-### Success Animations
+### Animation System
 
-#### Checkmark Animation
+#### Fade In Up
 
 ```css
-.checkmark {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--color-success);
-  position: relative;
-  animation: checkmark-scale 0.3s ease-in-out;
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.checkmark::after {
-  content: '';
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+```
+
+#### Shimmer Effect
+
+```css
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.1) 50%, 
+    rgba(255,255,255,0) 100%);
+  background-size: 1000px 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+```
+
+## Responsive Design Patterns
+
+### Mobile-First Approach
+
+```css
+/* Base mobile styles */
+.component {
+  padding: var(--space-4);
+  margin: var(--space-2);
+}
+
+/* Tablet enhancements */
+@media (min-width: 640px) {
+  .component {
+    padding: var(--space-6);
+    margin: var(--space-4);
+  }
+}
+
+/* Desktop enhancements */
+@media (min-width: 1024px) {
+  .component {
+    padding: var(--space-8);
+    margin: var(--space-6);
+  }
+}
+```
+
+## Accessibility Features
+
+### Focus Management
+
+```css
+.focus-visible {
+  outline: 2px solid var(--color-brand-red-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+```
+
+### Screen Reader Support
+
+```css
+.sr-only {
   position: absolute;
-  left: 8px;
-  top: 4px;
-  width: 6px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  animation: checkmark-draw 0.3s ease-in-out 0.1s both;
-}
-
-@keyframes checkmark-scale {
-  0% { transform: scale(0); }
-  100% { transform: scale(1); }
-}
-
-@keyframes checkmark-draw {
-  0% { height: 0; }
-  100% { height: 10px; }
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 ```
 
-## Responsive Animation Behavior
+## Theme Support
 
-### Mobile Optimizations
+### Dark Mode
 
 ```css
-/* Reduced animations for mobile */
-@media (max-width: 768px) {
-  .card-glass:hover {
-    transform: translateY(-2px); /* Reduced from -4px */
-  }
+.dark {
+  --color-background: oklch(0.145 0 0);
+  --color-foreground: oklch(0.985 0 0);
+  --color-card: oklch(0.145 0 0);
+  --color-card-foreground: oklch(0.985 0 0);
   
-  .btn-primary:hover {
-    transform: translateY(-1px); /* Reduced from -2px */
-  }
+  /* Dark mode overrides for success colors */
+  --color-success-500: #10b981; /* Brighter green for dark mode */
+  --color-success-foreground: #34d399; /* Lighter, more visible green text for dark mode */
   
-  /* Disable heavy animations on low-power devices */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
+  /* Dark theme YouTube colors */
+  --color-youtube-dark: #0f0f0f;
+  --color-youtube-card: #1c1c1c;
+  --color-youtube-card-hover: #272727;
+  --color-youtube-text-primary: #ffffff;
+  --color-youtube-text-secondary: #aaaaaa;
+  --color-youtube-text-tertiary: #666666;
+  --color-youtube-border: #303030;
+  --color-surface-primary: #0F0F0F;
+  --color-surface-secondary: #1C1C1C;
+  --color-surface-tertiary: #272727;
 }
 ```
 
-### Performance Considerations
+### Light Mode
 
 ```css
-/* GPU acceleration for animations */
-.animate-gpu {
-  will-change: transform, opacity;
-  transform: translateZ(0);
-}
-
-/* Remove will-change after animation */
-.animate-complete {
-  will-change: auto;
+.light {
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.09 0 0);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.09 0 0);
+  
+  /* Light theme semantic colors with better contrast */
+  --color-success-foreground: #0ace38; /* Darker green for higher contrast */
+  --color-warning-foreground: #b45309;
+  --color-error-foreground: #dc2626;
+  --color-info-foreground: #1d4ed8;
+  
+  /* Light theme YouTube colors - More distinct */
+  --color-youtube-dark: #0f0f0f;
+  --color-youtube-card: #ffffff;
+  --color-youtube-card-hover: #f8f9fa;
+  --color-youtube-text-primary: #0f0f0f;
+  --color-youtube-text-secondary: #5f6368;
+  --color-youtube-text-tertiary: #80868b;
+  --color-youtube-border: #dadce0;
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: #f8f9fa;
+  --color-surface-tertiary: #f1f3f4;
 }
 ```
-
-This component design system provides a comprehensive foundation for building modern, interactive UI components with sophisticated micro-interactions while maintaining excellent performance and accessibility standards.

@@ -165,6 +165,36 @@ python test_ffmpeg.py
 curl http://localhost:8000/api/system-info
 ```
 
+## 📦 Dependencies
+
+### Frontend Dependencies
+
+The frontend uses Next.js 15 with React 19 and the following key dependencies:
+
+- **Next.js 15.2.4** - React framework with App Router
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Component library built on Radix UI
+- **Lucide React** - Icon library
+- **React Hot Toast** - Notification system
+- **Zod** - Schema validation
+
+For a complete list, see `package.json`.
+
+### Backend Dependencies
+
+The backend uses FastAPI with the following key dependencies:
+
+- **FastAPI 0.115.6** - High-performance Python web framework
+- **uvicorn 0.34.0** - ASGI server
+- **pytubefix 9.5.0** - YouTube video extraction
+- **pydantic 2.10.4** - Data validation and settings management
+- **ffmpeg-python 0.2.0** - FFmpeg wrapper
+- **imageio-ffmpeg 0.6.0** - FFmpeg binary management
+
+For a complete list, see `backend/requirements.txt`.
+
 ## 🏗️ Development Workflow
 
 ### Daily Development Flow
@@ -179,21 +209,21 @@ curl http://localhost:8000/api/system-info
    pnpm dev
    ```
 
-1. **Make Changes**
+2. **Make Changes**
    - Frontend: Edit files in `components/`, `app/`, `lib/`
    - Backend: Edit files in `backend/`
    - Both servers auto-reload on changes
 
-1. **Test Changes**
+3. **Test Changes**
    - Frontend: Check <http://localhost:3000>
    - Backend: Use <http://localhost:8000/docs>
    - API: Test with Postman or curl
 
-1. **Commit & Push**
+4. **Commit & Push**
 
    ```bash
    git add .
-   git commit -m \"feat: description of changes\"
+   git commit -m "feat: description of changes"
    git push
    ```
 
@@ -313,7 +343,7 @@ curl -X POST http://localhost:8000/api/smart-download-info \
 
 ```bash
 # Test same video multiple times
-# Check server logs for \"Cache HIT\" messages
+# Check server logs for "Cache HIT" messages
 # Measure response time improvement
 ```
 
@@ -340,9 +370,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 ```python
 # Add debug prints
-logger.debug(f\"Processing video: {video_url}\")
-logger.debug(f\"Cache status: {cache_hit}\")
-logger.debug(f\"Selected streams: {smart_option}\")
+logger.debug(f"Processing video: {video_url}")
+logger.debug(f"Cache status: {cache_hit}")
+logger.debug(f"Selected streams: {smart_option}")
 ```
 
 #### Performance Monitoring
@@ -351,7 +381,7 @@ logger.debug(f\"Selected streams: {smart_option}\")
 # Time operations
 start_time = time.time()
 # ... operation ...
-logger.info(f\"Operation took {time.time() - start_time:.2f} seconds\")
+logger.info(f"Operation took {time.time() - start_time:.2f} seconds")
 ```
 
 ### Frontend Debugging
@@ -384,7 +414,7 @@ console.error('Download failed:', error)
 
 ```bash
 # Check installation
-python -c \"import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())\"
+python -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())"
 
 # Reinstall if needed
 pip uninstall imageio-ffmpeg
@@ -396,312 +426,155 @@ pip install imageio-ffmpeg
 ```python
 # Add your domain to CORS origins in main.py
 allow_origins=[
-    \"http://localhost:3000\",
-    \"http://127.0.0.1:3000\",  # Add this
-    \"https://yourdomain.com\"   # Production domain
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",  # Add this
+    "https://yourdomain.com"   # Production domain
 ]
 ```
 
 #### 3. Cache Issues
 
-```python
-# Clear cache by restarting server
-# Or add cache clearing endpoint for development
+```bash
+# Restart backend server to clear cache
+# Or wait for automatic cache cleanup (5 minutes)
 ```
 
-#### 4. TypeScript Errors
+#### 4. Video Download Failures
 
 ```bash
-# Check types
-npx tsc --noEmit
-
-# Update type definitions
-pnpm add -D @types/node @types/react
+# Test with different video URLs
+# Check YouTube video availability
+# Verify network connectivity
 ```
 
-## 📁 File Organization Best Practices
+## 📚 Documentation Updates
 
-### Frontend File Structure
+When making changes to the codebase, ensure documentation is updated accordingly:
 
-```text
-components/
-├── ui/              # Reusable UI components
-├── feature/         # Feature-specific components
-└── layout/          # Layout components
+1. **API Changes**: Update `documentation/API_DOCUMENTATION.md`
+2. **Component Changes**: Update `documentation/COMPONENT_DESIGN_SYSTEM.md`
+3. **Architecture Changes**: Update `documentation/CODE_ORGANIZATION.md`
+4. **Setup Changes**: Update `documentation/DEVELOPMENT_SETUP.md`
 
-lib/
-├── api.ts           # API client
-├── utils.ts         # Utility functions
-└── types.ts         # Type definitions
+## 🔄 Version Control Best Practices
 
-hooks/
-├── use-api.ts       # API-related hooks
-└── use-ui.ts        # UI-related hooks
+### Commit Message Format
+
+Follow conventional commit format:
+
+```
+feat: add new feature
+fix: resolve bug
+docs: update documentation
+style: code formatting
+refactor: code restructuring
+test: add tests
+chore: maintenance tasks
 ```
 
-### Backend File Structure
+### Branch Naming
 
-```text
-backend/
-├── main.py          # FastAPI app
-├── models/          # Pydantic models
-├── services/        # Business logic
-├── utils/           # Utility functions
-└── tests/           # Test files
+```
+feature/new-feature-name
+fix/bug-description
+docs/documentation-update
 ```
 
-### Naming Conventions
+## 🔒 Security Considerations
 
-#### Frontend (TypeScript)
+### Environment Variables
 
-- **Components**: PascalCase (`SmartDownloadButton.tsx`)
-- **Hooks**: camelCase with \"use\" prefix (`useDownload.ts`)
-- **Utils**: camelCase (`formatFileSize.ts`)
-- **Types**: PascalCase interfaces (`VideoMetadata`)
+Never commit sensitive information:
 
-#### Backend (Python)
+- API keys
+- Database credentials
+- Secret tokens
 
-- **Files**: snake_case (`smart_selection.py`)
-- **Functions**: snake_case (`get_smart_download_info`)
-- **Classes**: PascalCase (`StreamAnalysis`)
-- **Constants**: UPPER_SNAKE_CASE (`CACHE_TTL`)
+Use `.env.local` for local development and environment variables for production.
 
-## 🔧 IDE Configuration
+### Input Validation
 
-### VS Code Settings
+All user inputs are validated:
 
-#### .vscode/settings.json
+- URL validation using Pydantic
+- Stream ID validation
+- File path sanitization
 
-```json
-{
-  \"typescript.preferences.includePackageJsonAutoImports\": \"auto\",
-  \"editor.formatOnSave\": true,
-  \"editor.codeActionsOnSave\": {
-    \"source.fixAll.eslint\": true
-  },
-  \"python.defaultInterpreterPath\": \"./venv/bin/python\",
-  \"python.formatting.provider\": \"black\",
-  \"python.linting.enabled\": true,
-  \"python.linting.pylintEnabled\": true
-}
-```
+### CORS Configuration
 
-#### .vscode/extensions.json
-
-```json
-{
-  \"recommendations\": [
-    \"ms-python.python\",
-    \"ms-vscode.vscode-typescript-next\",
-    \"bradlc.vscode-tailwindcss\",
-    \"esbenp.prettier-vscode\",
-    \"ms-vscode.vscode-eslint\"
-  ]
-}
-```
-
-### Git Configuration
-
-#### .gitignore
-
-```gitignore
-# Dependencies
-node_modules/
-__pycache__/
-venv/
-
-# Build outputs
-.next/
-dist/
-build/
-
-# Environment files
-.env.local
-.env.production
-
-# IDE files
-.vscode/settings.json
-.idea/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Temporary files
-*.tmp
-*.log
-```
-
-#### .gitattributes
-
-```gitattributes
-* text=auto
-*.js text eol=lf
-*.ts text eol=lf
-*.tsx text eol=lf
-*.py text eol=lf
-*.md text eol=lf
-*.json text eol=lf
-```
-
-## 📊 Performance Optimization
-
-### Frontend Optimization
-
-#### Bundle Analysis
-
-```bash
-# Analyze bundle size
-pnpm build
-npx @next/bundle-analyzer
-```
-
-#### API Performance Monitoring
-
-```typescript
-// Monitor API call performance
-const startTime = performance.now()
-const result = await apiCall()
-const duration = performance.now() - startTime
-console.log(`API call took ${duration}ms`)
-```
-
-### Backend Optimization
-
-#### Profiling
+Proper CORS configuration prevents unauthorized access:
 
 ```python
-# Profile function performance
-import cProfile
-import pstats
-
-def profile_function():
-    pr = cProfile.Profile()
-    pr.enable()
-    # ... your function ...
-    pr.disable()
-    stats = pstats.Stats(pr)
-    stats.sort_stats('cumulative')
-    stats.print_stats()
+allow_origins=["http://localhost:3000"]  # Restrict to known domains
 ```
 
-#### Memory Monitoring
+## 🎯 Performance Optimization
+
+### Caching Strategy
+
+- 5-minute in-memory cache for video analysis
+- Automatic cache cleanup
+- Cache hit/miss monitoring
+
+### Parallel Processing
+
+- Concurrent video/audio downloads
+- Thread-safe operations
+- Efficient resource utilization
+
+### Lazy Loading
+
+- File size estimation instead of fetching
+- On-demand data loading
+- Reduced initial response time
+
+## 🧰 Useful Development Tools
+
+### VS Code Extensions
+
+- **Python**: Official Python extension
+- **ES7+ React/Redux/React-Native snippets**: Speed up React development
+- **Prettier**: Code formatting
+- **ESLint**: JavaScript/TypeScript linting
+- **Tailwind CSS IntelliSense**: Tailwind CSS autocomplete
+
+### Browser Extensions
+
+- **React Developer Tools**: Inspect React component tree
+- **Redux DevTools**: State management debugging
+- **Lighthouse**: Performance auditing
+
+### Command Line Tools
+
+- **httpie**: User-friendly HTTP client
+- **jq**: JSON processor
+- **watch**: Execute commands repeatedly
+
+## 📈 Monitoring & Logging
+
+### Backend Logging
+
+Structured logging for monitoring:
 
 ```python
-# Monitor memory usage
-import psutil
-import os
-
-def get_memory_usage():
-    process = psutil.Process(os.getpid())
-    return process.memory_info().rss / 1024 / 1024  # MB
+logger.info("Smart download completed in 2.5 seconds")
+logger.error("Failed to download stream: Connection timeout")
 ```
 
-## 🚀 Deployment Preparation
+### Performance Metrics
 
-### Production Build
+Monitor key metrics:
 
-#### Frontend
+- Response times
+- Cache hit rates
+- Memory usage
+- Error rates
+
+### Health Checks
+
+Regular health checks ensure system stability:
 
 ```bash
-# Create production build
-pnpm build
-
-# Test production build locally
-pnpm start
-
-# Export static files (if needed)
-pnpm export
+curl http://localhost:8000/health
+curl http://localhost:8000/api/system-info
 ```
-
-#### Backend
-
-```bash
-# Install production dependencies only
-pip install --no-dev -r requirements.txt
-
-# Test production server
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-### Environment Configuration
-
-#### Production Environment Variables
-
-```bash
-# Backend
-ENVIRONMENT=production
-CORS_ORIGINS=https://yourdomain.com
-CACHE_TTL=600
-LOG_LEVEL=INFO
-
-# Frontend
-NEXT_PUBLIC_API_URL=https://api.yourdomain.com
-NEXT_PUBLIC_ENVIRONMENT=production
-```
-
-## 📚 Additional Resources
-
-### Documentation Links
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [React Documentation](https://react.dev/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-
-### Learning Resources
-
-- [Next.js Tutorial](https://nextjs.org/learn)
-- [FastAPI Tutorial](https://fastapi.tiangolo.com/tutorial/)
-- [React Hooks Guide](https://react.dev/reference/react)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/)
-
-### Community & Support
-
-- [Next.js GitHub](https://github.com/vercel/next.js)
-- [FastAPI GitHub](https://github.com/tiangolo/fastapi)
-- [React Community](https://react.dev/community)
-- [Stack Overflow](https://stackoverflow.com/)
-
----
-
-## ✅ Development Checklist
-
-### Initial Setup
-
-- [ ] Clone repository
-- [ ] Install Node.js dependencies
-- [ ] Install Python dependencies
-- [ ] Install FFmpeg
-- [ ] Test both servers
-- [ ] Verify API communication
-
-### Before Making Changes
-
-- [ ] Create feature branch
-- [ ] Understand existing code
-- [ ] Plan your changes
-- [ ] Set up debugging
-
-### Before Committing
-
-- [ ] Test all functionality
-- [ ] Check for console errors
-- [ ] Verify performance impact
-- [ ] Update documentation
-- [ ] Run type checking
-- [ ] Test edge cases
-
-### Before Deployment
-
-- [ ] Create production build
-- [ ] Test production environment
-- [ ] Update environment variables
-- [ ] Performance testing
-- [ ] Security review
-- [ ] Backup current version
-
----
-
-## Happy coding! 🎉

@@ -11,6 +11,7 @@ Welcome to the YouTube Downloader documentation! This folder contains comprehens
 ### 🏗️ Architecture & Code
 
 - **[CODE_ORGANIZATION.md](./CODE_ORGANIZATION.md)** - Detailed project structure, architecture patterns, and code organization principles
+- **[COMPONENT_DESIGN_SYSTEM.md](./COMPONENT_DESIGN_SYSTEM.md)** - Design tokens, component specifications, and micro-interaction patterns
 
 ### ⚙️ Setup & Configuration
 
@@ -19,6 +20,7 @@ Welcome to the YouTube Downloader documentation! This folder contains comprehens
 ### 🎯 Feature Guides
 
 - **[SMART_DOWNLOAD_SETUP.md](./SMART_DOWNLOAD_SETUP.md)** - FFmpeg installation and smart download feature configuration
+- **[ABOUT_PAGE_IMPLEMENTATION.md](./ABOUT_PAGE_IMPLEMENTATION.md)** - Implementation details for the About page component
 
 ## 🚀 Quick Navigation
 
@@ -27,7 +29,9 @@ Welcome to the YouTube Downloader documentation! This folder contains comprehens
 | **Getting Started** | [DEVELOPMENT_SETUP.md](./DEVELOPMENT_SETUP.md) | Start here for initial setup |
 | **API Integration** | [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) | For developers integrating with the API |
 | **Project Structure** | [CODE_ORGANIZATION.md](./CODE_ORGANIZATION.md) | Understanding the codebase |
+| **Design System** | [COMPONENT_DESIGN_SYSTEM.md](./COMPONENT_DESIGN_SYSTEM.md) | UI components and design tokens |
 | **Advanced Features** | [SMART_DOWNLOAD_SETUP.md](./SMART_DOWNLOAD_SETUP.md) | FFmpeg and smart downloads |
+| **About Page** | [ABOUT_PAGE_IMPLEMENTATION.md](./ABOUT_PAGE_IMPLEMENTATION.md) | Implementation details for About page |
 
 ## 📝 Contributing to Documentation
 

@@ -16,8 +16,8 @@ YT-Downloader/
 │   ├── 📄 globals.css               # Global styles with YouTube theme
 │   ├── 📄 layout.tsx                # Root layout with metadata
 │   ├── 📄 page.tsx                  # Main application page
-│   └── 📂 api/                      # Next.js API routes
-│                                    # (unused - using Python backend)
+│   └── 📂 about/                    # About page
+│       └── 📄 page.tsx              # About page content
 │
 ├── 📂 components/                   # React Components
 │   ├── 📂 ui/                       # shadcn/ui base components
@@ -26,6 +26,8 @@ YT-Downloader/
 │   │   ├── 📄 progress.tsx          # Progress bar component
 │   │   └── 📄 ... (other UI components)
 │   │
+│   ├── 📄 navbar.tsx                # Navigation bar with logo and links
+│   ├── 📄 footer.tsx                # Comprehensive footer with links and information
 │   ├── 📄 download-mode-selector.tsx    # Smart/Manual mode toggle
 │   ├── 📄 enhanced-stream-selector.tsx  # Main selector wrapper
 │   ├── 📄 smart-download-button.tsx     # Smart download functionality
@@ -101,22 +103,35 @@ YT-Downloader/
 ### Frontend Component Hierarchy
 
 ```text
-App (page.tsx)
-├── UrlInput
-│   └── Input validation & submission
-├── VideoInfo
-│   └── Metadata display (title, duration, thumbnail)
-└── EnhancedStreamSelector
-    ├── DownloadModeSelector
-    │   └── Smart/Manual mode toggle
-    ├── SmartDownloadButton (Smart Mode)
-    │   ├── Progress tracking
-    │   ├── Real-time updates
-    │   └── Error handling
-    └── StreamSelector (Manual Mode)
-        ├── Stream categorization
-        ├── Quality indicators
-        └── Individual download buttons
+App Layout (layout.tsx)
+├── Navbar (navbar.tsx)
+├── Main Content (page.tsx)
+│   ├── UrlInput
+│   │   └── Input validation & submission
+│   ├── VideoInfo
+│   │   └── Metadata display (title, duration, thumbnail)
+│   └── EnhancedStreamSelector
+│       ├── DownloadModeSelector
+│       │   └── Smart/Manual mode toggle
+│       ├── SmartDownloadButton (Smart Mode)
+│       │   ├── Progress tracking
+│       │   ├── Real-time updates
+│       │   └── Error handling
+│       └── StreamSelector (Manual Mode)
+│           ├── Stream categorization
+│           ├── Quality indicators
+│           └── Individual download buttons
+└── Footer (footer.tsx)
+
+About Page (about/page.tsx)
+├── Navbar (navbar.tsx)
+├── Hero Section
+├── Mission Statement
+├── Key Features
+├── Developer Profile
+├── Technology Stack
+├── Contact Section
+└── Footer (footer.tsx)
 ```
 
 ### Backend Module Architecture
