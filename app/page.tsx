@@ -4,77 +4,66 @@ import { useState } from "react"
 import { UrlInput } from "@/components/url-input"
 import { VideoInfo } from "@/components/video-info"
 import { EnhancedStreamSelector } from "@/components/enhanced-stream-selector"
-import { toast } from "react-hot-toast"
+import { toast } from "@/lib/toast-bus"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { Play, Download, Settings, HomeIcon } from "lucide-react"
 import Link from "next/link"
 import type { VideoMetadata } from "@/lib/api"
 
+// Main Home page component for the YTDownloader application
+// Handles video URL input, metadata display, stream selection, and download management
 export default function Home() {
+  // State management for video metadata and URL
   const [videoMetadata, setVideoMetadata] = useState<VideoMetadata | null>(null)
   const [videoUrl, setVideoUrl] = useState<string>("")
+  
+  // Track active downloads to show progress indicators
   const [activeDownloads, setActiveDownloads] = useState<Set<string>>(new Set())
-  // Colored toast helpers
+  
+  // Colored toast helpers for user feedback
+  // Success toast for download start notification
   const showStartToast = (filename: string) =>
-    toast(() => (
-      <div className="relative w-[min(92vw,420px)] rounded-2xl border border-blue-500/40 bg-gradient-to-br from-blue-600/15 to-indigo-500/15 backdrop-blur-md p-4 pr-6 text-foreground shadow-xl mr-1">
-        <div className="absolute left-0 top-0 h-full w-1.5 bg-blue-500" />
-        <div className="flex items-start gap-3">
-          <div className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-md bg-blue-500 text-white">
-            <Download className="h-4 w-4" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Download Started</p>
-            <p className="text-xs text-blue-700/80 dark:text-blue-300/80">Preparing {filename}...</p>
-          </div>
-        </div>
-      </div>
-    ), { duration: 2500 })
+    toast.info(`Preparing ${filename}...`, "Download Started", 2500)
 
+  // Success toast for download completion notification
   const showCompleteToast = (filename: string) =>
-    toast(() => (
-      <div className="relative w-[min(92vw,420px)] rounded-2xl border border-green-500/40 bg-gradient-to-br from-green-600/15 to-emerald-500/15 backdrop-blur-md p-4 pr-6 text-foreground shadow-xl mr-1">
-        <div className="absolute left-0 top-0 h-full w-1.5 bg-green-500" />
-        <div className="flex items-start gap-3">
-          <div className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-md bg-green-500 text-white">
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 6L9 17l-5-5"/></svg>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-green-700 dark:text-green-300">Download Complete</p>
-            <p className="text-xs text-green-700/80 dark:text-green-300/80 break-all line-clamp-2">{filename}</p>
-          </div>
-        </div>
-      </div>
-    ))
+    toast.success(`${filename}`, "Download Complete")
 
+  // Error toast for download failure notification
   const showErrorToast = (filename: string, error: string) =>
-    toast(() => (
-      <div className="relative w-[min(92vw,420px)] rounded-2xl border border-red-500/40 bg-gradient-to-br from-red-600/15 to-rose-500/15 backdrop-blur-md p-4 pr-6 text-foreground shadow-xl mr-1">
-        <div className="absolute left-0 top-0 h-full w-1.5 bg-red-500" />
-        <div className="flex items-start gap-3">
-          <div className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-md bg-red-500 text-white">
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-red-700 dark:text-red-300">Download Failed</p>
-            <p className="text-xs text-red-700/80 dark:text-red-300/80 break-all line-clamp-2">{filename}: {error}</p>
-          </div>
-        </div>
-      </div>
-    ), { duration: 6000 })
+    toast.error(`${filename}: ${error}`, "Download Failed", 6000)
 
+  /**
+   * Handles video metadata fetch completion
+   * Updates state with new video metadata and URL
+   * @param metadata - Video metadata object
+   * @param url - YouTube video URL
+   */
   const handleVideoFetched = (metadata: VideoMetadata, url: string) => {
     setVideoMetadata(metadata)
     setVideoUrl(url)
   }
 
+  /**
+   * Handles download start event
+   * Adds stream to active downloads and shows start notification
+   * @param streamId - ID of the stream being downloaded
+   * @param filename - Name of the file being downloaded
+   */
   const handleDownloadStart = (streamId: string, filename: string) => {
     console.log(`Starting download for ${streamId}: ${filename}`)
     setActiveDownloads(prev => new Set([...prev, streamId]))
     showStartToast(filename)
   }
 
+  /**
+   * Handles download progress updates
+   * Removes stream from active downloads when progress reaches 100%
+   * @param streamId - ID of the stream being downloaded
+   * @param progress - Download progress percentage
+   * @param stage - Current download stage
+   */
   const handleDownloadProgress = (streamId: string, progress: number, stage?: string) => {
     if (progress >= 100) {
       setActiveDownloads(prev => {
@@ -85,6 +74,12 @@ export default function Home() {
     }
   }
 
+  /**
+   * Handles download completion
+   * Removes stream from active downloads and shows completion notification
+   * @param streamId - ID of the completed stream
+   * @param filename - Name of the completed file
+   */
   const handleDownloadComplete = (streamId: string, filename: string) => {
     setActiveDownloads(prev => {
       const newSet = new Set(prev)
@@ -94,6 +89,13 @@ export default function Home() {
     showCompleteToast(filename)
   }
 
+  /**
+   * Handles download errors
+   * Removes stream from active downloads and shows error notification
+   * @param streamId - ID of the stream that failed
+   * @param error - Error message
+   * @param filename - Name of the file that failed (optional)
+   */
   const handleDownloadError = (streamId: string, error: string, filename?: string) => {
     setActiveDownloads(prev => {
       const newSet = new Set(prev)

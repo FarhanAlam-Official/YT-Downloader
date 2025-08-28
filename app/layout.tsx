@@ -2,21 +2,24 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { DM_Sans, Space_Grotesk } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "react-hot-toast"
+import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 
+// Font configuration for DM Sans (primary font)
 const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-dm-sans",
 })
 
+// Font configuration for Space Grotesk (secondary font)
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-space-grotesk",
 })
 
+// SEO metadata configuration for the application
 export const metadata: Metadata = {
   title: "YTDownloader - Download YouTube Videos & Audio",
   description: "Download YouTube videos and audio in various formats and qualities. Fast, secure, and easy to use. No registration required.",
@@ -75,6 +78,7 @@ export const metadata: Metadata = {
   },
 }
 
+// Viewport configuration for responsive design
 export const viewport: Viewport = {
   themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#0f0f0f" }, { color: "#ffffff" }],
   width: "device-width",
@@ -83,6 +87,8 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
+// Root layout component that wraps all pages in the application
+// Provides global styling, fonts, theme provider, and toast notifications
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -95,29 +101,18 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Favicon configuration */}
         <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
+        {/* Theme provider for dark/light mode support */}
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
-          <Toaster
-            position="top-right"
-            gutter={10}
-            toastOptions={{
-              style: {
-                background: "transparent",
-                boxShadow: "none",
-                padding: 0,
-                maxWidth: "420px",
-              },
-            }}
-            containerStyle={{
-              inset: "16px",
-            }}
-          />
+          {/* Toast notification system */}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

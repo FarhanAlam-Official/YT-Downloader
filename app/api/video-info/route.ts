@@ -1,6 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-// Extract video ID from YouTube URL
+/**
+ * Extracts YouTube video ID from various YouTube URL formats
+ * @param url - YouTube video URL
+ * @returns Video ID string or null if not found
+ */
 function extractVideoId(url: string): string | null {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
@@ -14,10 +18,18 @@ function extractVideoId(url: string): string | null {
   return null
 }
 
+/**
+ * POST handler for the video-info API route
+ * Fetches video metadata and available streams from YouTube or returns mock data
+ * @param request - Next.js request object containing video URL
+ * @returns NextResponse with video metadata or error message
+ */
 export async function POST(request: NextRequest) {
   try {
+    // Extract URL from request body
     const { url } = await request.json()
 
+    // Validate URL parameter
     if (!url) {
       return NextResponse.json({ detail: "URL is required" }, { status: 400 })
     }
@@ -29,6 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
+      // Attempt to fetch video metadata using YouTube's oEmbed API
       const oembedResponse = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`)
 
       if (!oembedResponse.ok) {
@@ -37,9 +50,10 @@ export async function POST(request: NextRequest) {
 
       const oembedData = await oembedResponse.json()
 
-      // Get additional metadata from YouTube's public API (no key required for basic info)
+      // Construct thumbnail URL using YouTube's image service
       const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
 
+      // Prepare video data with mock streams (since actual stream fetching is done server-side)
       const videoData = {
         title: oembedData.title,
         duration: 0, // oEmbed doesn't provide duration
@@ -135,6 +149,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json(videoData)
     } catch (fetchError) {
+      // Fallback to mock data if oEmbed API fails
       const mockData = {
         title: "YouTube Video",
         duration: 0,

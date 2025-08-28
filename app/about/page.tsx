@@ -3,7 +3,12 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { toast } from "@/lib/toast-bus"
 import { Navbar } from "@/components/navbar"
+// Global toast system is mounted in RootLayout
 import { Footer } from "@/components/footer"
 import { 
   Play, 
@@ -28,10 +33,89 @@ import {
   Linkedin
 } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
 
+// Main About page component showcasing the YTDownloader mission, features, and team
 export default function AboutPage() {
+
+  // Support email for contact form
+  const supportEmail = "thefarhanalam01@gmail.com"
+  
+  const [submitting, setSubmitting] = useState(false)
+
+  /**
+   * Copies the support email to the clipboard
+   * Provides user feedback via toast notifications
+   */
+  function handleCopyEmail() {
+    try {
+      navigator.clipboard.writeText(supportEmail)
+      toast.success("Support email copied to clipboard.", "Email copied")
+    } catch (error) {
+      toast.error("Please copy the email manually.", "Copy failed")
+    }
+  }
+
+  /**
+   * Handles contact form submission
+   * Validates form data and sends it to the backend API
+   * @param event - Form submission event
+   */
+  async function handleSubmitContact(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const name = String(formData.get("name") || "").trim()
+    const email = String(formData.get("email") || "").trim()
+    const subject = String(formData.get("subject") || "General Inquiry").trim()
+    const message = String(formData.get("message") || "").trim()
+    const honeypot = String(formData.get("company") || "")
+    const formStartTimestamp = Number((form as any)._formStart || Date.now() / 1000)
+
+    // Basic form validation
+    if (!name || !email || !message) {
+      toast.error("Please fill name, email, and message.", "Missing fields")
+      return
+    }
+
+    try {
+      setSubmitting(true)
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000)
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000"
+      const url = `${apiBase}/api/contact`
+      const payload = { name, email, subject, message, honeypot, formStartTimestamp }
+      console.log("[contact] sending", { url, payload, online: navigator.onLine })
+      // Submit form data to backend API
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      })
+      clearTimeout(timeoutId)
+      console.log("[contact] response status", res.status, res.statusText)
+      const data = await res.json().catch(() => ({}))
+      console.log("[contact] response body", data)
+      if (!res.ok) throw new Error(data?.detail || data?.message || "Failed to send")
+      toast.success("Thanks! We will get back to you soon.", "Message sent")
+      form.reset()
+    } catch (err: any) {
+      console.error("[contact] error", { name: err?.name, message: err?.message, online: navigator.onLine })
+      if (err?.name === "AbortError") {
+        toast.error("Please try again.", "Request timed out")
+      } else {
+        toast.error(err?.message || "Please try again later.", "Could not send")
+      }
+    }
+    finally {
+      setSubmitting(false)
+    }
+  }
+  
   return (
     <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted relative overflow-hidden">
+      
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-0 right-0 w-96 h-96 bg-youtube-red/10 rounded-full blur-3xl"></div>
@@ -174,6 +258,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Smart Download Feature Card */}
             <Card className="relative overflow-hidden p-8 transition-all duration-300 group bg-gradient-to-br from-youtube-card to-youtube-card-hover border border-border hover:shadow-2xl hover:scale-[1.02]">
               <div className="pointer-events-none absolute inset-0 rounded-[20px] p-[1px]">
                 <div className="absolute -inset-[2px] rounded-[22px] bg-[conic-gradient(var(--tw-gradient-stops))] from-youtube-red via-success-500 to-info-500 opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
@@ -193,6 +278,7 @@ export default function AboutPage() {
               </div>
             </Card>
 
+            {/* Privacy Protection Feature Card */}
             <Card className="relative overflow-hidden p-8 transition-all duration-300 group bg-gradient-to-br from-youtube-card to-youtube-card-hover border border-border hover:shadow-2xl hover:scale-[1.02]">
               <div className="pointer-events-none absolute inset-0 rounded-[20px] p-[1px]">
                 <div className="absolute -inset-[2px] rounded-[22px] bg-[conic-gradient(var(--tw-gradient-stops))] from-info-500 via-youtube-red to-success-500 opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
@@ -212,6 +298,7 @@ export default function AboutPage() {
               </div>
             </Card>
 
+            {/* Lightning Fast Feature Card */}
             <Card className="relative overflow-hidden p-8 transition-all duration-300 group bg-gradient-to-br from-youtube-card to-youtube-card-hover border border-border hover:shadow-2xl hover:scale-[1.02]">
               <div className="pointer-events-none absolute inset-0 rounded-[20px] p-[1px]">
                 <div className="absolute -inset-[2px] rounded-[22px] bg-[conic-gradient(var(--tw-gradient-stops))] from-brand-red-500 via-youtube-red to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
@@ -231,6 +318,7 @@ export default function AboutPage() {
               </div>
             </Card>
 
+            {/* Always Available Feature Card */}
             <Card className="relative overflow-hidden p-8 transition-all duration-300 group bg-gradient-to-br from-youtube-card to-youtube-card-hover border border-border hover:shadow-2xl hover:scale-[1.02]">
               <div className="pointer-events-none absolute inset-0 rounded-[20px] p-[1px]">
                 <div className="absolute -inset-[2px] rounded-[22px] bg-[conic-gradient(var(--tw-gradient-stops))] from-warning-500 via-info-500 to-success-500 opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
@@ -250,6 +338,7 @@ export default function AboutPage() {
               </div>
             </Card>
 
+            {/* Premium Quality Feature Card */}
             <Card className="relative overflow-hidden p-8 transition-all duration-300 group bg-gradient-to-br from-youtube-card to-youtube-card-hover border border-border hover:shadow-2xl hover:scale-[1.02]">
               <div className="pointer-events-none absolute inset-0 rounded-[20px] p-[1px]">
                 <div className="absolute -inset-[2px] rounded-[22px] bg-[conic-gradient(var(--tw-gradient-stops))] from-purple-500 via-indigo-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
@@ -269,6 +358,7 @@ export default function AboutPage() {
               </div>
             </Card>
 
+            {/* User Focused Feature Card */}
             <Card className="relative overflow-hidden p-8 transition-all duration-300 group bg-gradient-to-br from-youtube-card to-youtube-card-hover border border-border hover:shadow-2xl hover:scale-[1.02]">
               <div className="pointer-events-none absolute inset-0 rounded-[20px] p-[1px]">
                 <div className="absolute -inset-[2px] rounded-[22px] bg-[conic-gradient(var(--tw-gradient-stops))] from-pink-500 via-rose-500 to-purple-500 opacity-0 transition-opacity duration-300 group-hover:opacity-60" />
@@ -414,6 +504,7 @@ export default function AboutPage() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-12">
+              {/* Frontend Technologies */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
@@ -452,6 +543,7 @@ export default function AboutPage() {
                 </div>
               </div>
 
+              {/* Backend Technologies */}
               <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
@@ -502,72 +594,101 @@ export default function AboutPage() {
 
         {/* Contact Section */}
         <section className="mb-16">
-          <Card className="youtube-card p-8 md:p-12 text-center hover:transform hover:scale-[1.02] transition-all duration-500 border border-border/50 bg-background/50 backdrop-blur-sm">
-            <div className="max-w-3xl mx-auto">
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-youtube-red/20 to-brand-red-500/20 rounded-full mb-6">
-                <Heart className="h-5 w-5 text-youtube-red" />
-                <span className="text-youtube-red font-medium">We'd love to hear from you</span>
-              </div>
-              <h2 className="text-3xl font-serif font-bold text-foreground mb-4">
-                Get in Touch
-              </h2>
-              <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
-                Have questions, suggestions, or need support? We'd love to hear from you!
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-6 mb-10 max-w-2xl mx-auto">
-                <Card className="p-6 bg-muted/30 hover:bg-muted/50 transition-colors border-border/30 dark:bg-muted/20 dark:hover:bg-muted/30">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-youtube-red to-brand-red-600 flex items-center justify-center mx-auto mb-4">
-                    <Mail className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="font-bold text-foreground mb-2">Email Support</h3>
-                  <p className="text-muted-foreground text-sm mb-4">Get in touch directly with our team</p>
-                  <Button className="youtube-gradient w-full flex items-center justify-center gap-2" asChild>
-                    <a href="mailto:thefarhanalam01@gmail.com">
-                      <Mail className="h-4 w-4" />
-                      thefarhanalam01@gmail.com
-                    </a>
-                  </Button>
-                </Card>
-                
-                <Card className="p-6 bg-muted/30 hover:bg-muted/50 transition-colors border-border/30 dark:bg-muted/20 dark:hover:bg-muted/30">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mx-auto mb-4">
-                    <Twitter className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="font-bold text-foreground mb-2">Social Media</h3>
-                  <p className="text-muted-foreground text-sm mb-4">Follow us for updates and announcements</p>
-                  <Button variant="outline" className="w-full border-border text-muted-foreground hover:text-foreground dark:border-border/50">
-                    <Twitter className="h-4 w-4 mr-2" />
-                    Follow Updates
-                  </Button>
-                </Card>
+          <Card className="youtube-card p-8 md:p-12 transition-all duration-500 border border-border/50 bg-background/50 backdrop-blur-sm">
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-youtube-red/20 to-brand-red-500/20 rounded-full mb-4">
+                  <Heart className="h-5 w-5 text-youtube-red" />
+                  <span className="text-youtube-red font-medium">We'd love to hear from you</span>
+                </div>
+                <h2 className="text-3xl font-serif font-bold text-foreground mb-2">Get in Touch</h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Questions, feedback, or support—reach out and we’ll respond quickly.</p>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground/80 mb-10">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-success-500 rounded-full"></div>
-                  <span>Response within 24 hours</span>
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* Left: Quick actions */}
+                <div className="space-y-4 lg:col-span-1">
+                  <Card className="p-6 bg-muted/30 hover:bg-muted/50 transition-colors border-border/30 dark:bg-muted/20 dark:hover:bg-muted/30">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-youtube-red to-brand-red-600 flex items-center justify-center">
+                        <Mail className="h-5 w-5 text-white" />
+                      </div>
+                      <h3 className="font-semibold">Email Support</h3>
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      <Button className="youtube-gradient w-full" asChild>
+                        <a href={`mailto:${supportEmail}`}>
+                          <Mail className="h-4 w-4 mr-2" />
+                          Email Us
+                        </a>
+                      </Button>
+                      <Button variant="outline" className="w-full" onClick={handleCopyEmail}>
+                        Copy Email
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-3 break-all">{supportEmail}</p>
+                  </Card>
+
+                  <Card className="p-6 bg-muted/30 hover:bg-muted/50 transition-colors border-border/30 dark:bg-muted/20 dark:hover:bg-muted/30">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                        <Twitter className="h-5 w-5 text-white" />
+                      </div>
+                      <h3 className="font-semibold">Social Updates</h3>
+                    </div>
+                    <Button variant="outline" className="w-full border-border text-muted-foreground hover:text-foreground dark:border-border/50" asChild>
+                      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                        <Twitter className="h-4 w-4 mr-2" />
+                        Follow on X
+                      </a>
+                    </Button>
+                  </Card>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-info-500 rounded-full"></div>
-                  <span>24/7 Support Available</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-warning-500 rounded-full"></div>
-                  <span>Community Driven</span>
+
+                {/* Right: Contact form */}
+                <div className="lg:col-span-2">
+                  <Card className="p-6 md:p-8 bg-gradient-to-br from-youtube-card to-youtube-card-hover border border-border">
+                    <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmitContact} onChange={(e) => { (e.currentTarget as any)._formStart = (e.currentTarget as any)._formStart || Date.now() / 1000 }}>
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" name="name" placeholder="Your name" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" name="email" type="email" placeholder="you@example.com" required />
+                      </div>
+                      <div className="md:col-span-2 space-y-2">
+                        <Label htmlFor="subject">Subject</Label>
+                        <Input id="subject" name="subject" placeholder="How can we help?" />
+                      </div>
+                      <div className="md:col-span-2 space-y-2">
+                        <Label htmlFor="message">Message</Label>
+                        <Textarea id="message" name="message" placeholder="Write your message..." className="min-h-[140px]" required />
+                      </div>
+                      {/* Honeypot */}
+                      <input type="text" name="company" autoComplete="off" className="hidden" tabIndex={-1} aria-hidden="true" />
+                      <div className="md:col-span-2 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <div className="w-3 h-3 bg-success-500 rounded-full"></div>
+                          Typically responds within 24 hours
+                        </div>
+                        <Button type="submit" className="youtube-gradient px-6" disabled={submitting}>
+                          {submitting ? "Sending..." : "Send Message"}
+                        </Button>
+                      </div>
+                    </form>
+                  </Card>
                 </div>
               </div>
 
               {/* Call to Action */}
-              <div className="pt-8 border-t border-border/50 dark:border-border/30">
+              <div className="pt-10 mt-10 border-t border-border/50 text-center">
                 <Link href="/">
-                  <Button className="youtube-gradient px-8 py-4 text-lg font-semibold mb-4 hover:shadow-lg transition-shadow">
+                  <Button className="youtube-gradient px-8 py-4 text-lg font-semibold mb-3 hover:shadow-lg transition-shadow">
                     Start Downloading Now
                   </Button>
                 </Link>
-                <p className="text-sm text-muted-foreground/80 dark:text-muted-foreground/70">
-                  Join thousands of satisfied users worldwide
-                </p>
+                <p className="text-sm text-muted-foreground/80">Join thousands of satisfied users worldwide</p>
               </div>
             </div>
           </Card>

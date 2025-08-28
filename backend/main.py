@@ -29,15 +29,19 @@ from typing import Any, Dict, List, Optional
 
 # Third-party imports
 import uvicorn
-from fastapi import BackgroundTasks, FastAPI, HTTPException
+from dotenv import load_dotenv
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, HTMLResponse
+import httpx
+import re
 
 # Local module imports
 from app.config import settings
 from app.models import (
     VideoURL, StreamInfo, VideoMetadata, DownloadRequest,
-    SmartDownloadRequest, SmartDownloadInfo, SystemInfo
+    SmartDownloadRequest, SmartDownloadInfo, SystemInfo,
+    ContactRequest, ContactResponse
 )
 from app.exceptions import (
     VideoNotFoundError, InvalidURLError, StreamNotFoundError,
@@ -52,6 +56,9 @@ from utils.helpers import create_temp_directory, cleanup_temp_directory
 # ============================================================================
 # APPLICATION CONFIGURATION
 # ============================================================================
+
+# Load environment variables from .env if present
+load_dotenv()
 
 # Initialize FastAPI application with metadata
 app = FastAPI(
@@ -1088,6 +1095,92 @@ async def smart_download(request: SmartDownloadRequest):
         if temp_dir:
             ffmpeg_service.cleanup_merge_dir(temp_dir)
         raise HTTPException(status_code=500, detail=f"Smart download failed: {str(e)}")
+
+
+EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+_rate_limit_cache: Dict[str, List[float]] = {}
+
+@app.post("/api/contact", response_model=ContactResponse)
+async def contact_endpoint(request: Request, payload: ContactRequest, background: BackgroundTasks = None):
+    """Receive contact submission and send via Brevo."""
+    # Honeypot check
+    if payload.honeypot:
+        raise HTTPException(status_code=400, detail="Spam detected")
+
+    # Basic validation
+    if not payload.name.strip() or not payload.email.strip() or not payload.message.strip():
+        raise HTTPException(status_code=400, detail="Missing required fields")
+    if not EMAIL_REGEX.match(payload.email):
+        raise HTTPException(status_code=400, detail="Invalid email")
+    if len(payload.message.strip()) < 10:
+        raise HTTPException(status_code=400, detail="Message too short")
+
+    # Timing anti-bot: require >= 2s from form start
+    now = time.time()
+    if payload.formStartTimestamp and (now - float(payload.formStartTimestamp) < 2):
+        raise HTTPException(status_code=400, detail="Form submitted too quickly")
+
+    # Simple in-memory rate limiting by IP
+    client_ip = request.client.host if request.client else "unknown"
+    window_seconds = 60
+    max_requests = int(os.getenv("RATE_LIMIT_PER_MIN", "5"))
+    timestamps = _rate_limit_cache.get(client_ip, [])
+    timestamps = [ts for ts in timestamps if now - ts < window_seconds]
+    if len(timestamps) >= max_requests:
+        raise HTTPException(status_code=429, detail="Too many requests, please try later")
+    timestamps.append(now)
+    _rate_limit_cache[client_ip] = timestamps
+
+    # Prepare Brevo payload
+    brevo_api_key = os.getenv("BREVO_API_KEY")
+    if not brevo_api_key:
+        raise HTTPException(status_code=500, detail="Email service not configured")
+
+    to_email = os.getenv("CONTACT_TO_EMAIL", "thefarhanalam01@gmail.com")
+    from_email = os.getenv("CONTACT_FROM_EMAIL", to_email)
+    from_name = os.getenv("CONTACT_FROM_NAME", "YTDownloader")
+
+    email_subject = payload.subject or "General Inquiry"
+    email_text = (
+        f"New contact submission from YTDownloader\n\n"
+        f"Name: {payload.name}\n"
+        f"Email: {payload.email}\n"
+        f"Subject: {email_subject}\n\n"
+        f"Message:\n{payload.message}\n"
+    )
+
+    json_body = {
+        "sender": {"name": from_name, "email": from_email},
+        "to": [{"email": to_email}],
+        "subject": f"[Contact] {email_subject}",
+        "textContent": email_text,
+    }
+
+    async def send_email_async():
+        try:
+            async with httpx.AsyncClient(timeout=8) as client:
+                resp = await client.post(
+                    "https://api.brevo.com/v3/smtp/email",
+                    headers={
+                        "api-key": brevo_api_key,
+                        "accept": "application/json",
+                        "content-type": "application/json",
+                    },
+                    json=json_body,
+                )
+                if resp.status_code >= 300:
+                    logger.error(f"Brevo error: {resp.status_code} {resp.text}")
+        except Exception as e:
+            logger.error(f"Brevo exception: {e}")
+
+    # Schedule background send and return immediately
+    if background is not None:
+        background.add_task(send_email_async)
+    else:
+        # Fallback if BackgroundTasks not available
+        await send_email_async()
+
+    return ContactResponse(success=True, message="Queued")
 
 
 # ============================================================================

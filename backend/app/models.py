@@ -191,3 +191,32 @@ class SystemInfo(BaseModel):
                 "smart_download_supported": True
             }
         }
+
+
+class ContactRequest(BaseModel):
+    """
+    Request model for contact form submissions.
+    """
+    name: str
+    email: str
+    subject: Optional[str] = "General Inquiry"
+    message: str
+    honeypot: Optional[str] = None
+    formStartTimestamp: Optional[float] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "Jane Doe",
+                "email": "jane@example.com",
+                "subject": "Support",
+                "message": "I need help with...",
+                "honeypot": "",
+                "formStartTimestamp": 1710000000.0
+            }
+        }
+
+
+class ContactResponse(BaseModel):
+    success: bool
+    message: str

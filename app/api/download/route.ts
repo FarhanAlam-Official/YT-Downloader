@@ -2,18 +2,27 @@ import { type NextRequest, NextResponse } from "next/server"
 import { readFile } from "fs/promises"
 import { join } from "path"
 
+/**
+ * POST handler for the download API route
+ * Simulates video download by serving sample files or generating mock content
+ * @param request - Next.js request object containing download parameters
+ * @returns NextResponse with file content or error message
+ */
 export async function POST(request: NextRequest) {
   try {
+    // Extract download parameters from request body
     const { video_url, stream_id, filename } = await request.json()
 
+    // Validate required parameters
     if (!video_url || !stream_id) {
       return NextResponse.json({ detail: "Video URL and stream ID are required" }, { status: 400 })
     }
 
+    // Default sample file configuration
     let sampleFile = "sample-720p.mp4"
     let contentType = "video/mp4"
 
-    // Map different stream IDs to different sample files
+    // Map different stream IDs to appropriate sample files
     if (stream_id.includes("480p")) {
       sampleFile = "sample-480p.mp4"
     } else if (stream_id.includes("audio") || stream_id.includes("mp3")) {
@@ -22,13 +31,15 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      // Try to read the actual sample file
+      // Try to read the actual sample file from public directory
       const filePath = join(process.cwd(), "public", "samples", sampleFile)
       const fileBuffer = await readFile(filePath)
       const blob = new Blob([fileBuffer], { type: contentType })
 
+      // Determine download filename
       const downloadFilename = filename || `video_${stream_id}.${contentType.includes("audio") ? "mp3" : "mp4"}`
 
+      // Return file as downloadable response
       return new NextResponse(blob, {
         headers: {
           "Content-Type": contentType,
