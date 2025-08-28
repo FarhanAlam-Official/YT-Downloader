@@ -76,6 +76,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Debug: Log environment variables for troubleshooting
+logger.info(f"Environment check - HOST: {os.getenv('HOST', 'NOT_SET')}")
+logger.info(f"Environment check - PORT: {os.getenv('PORT', 'NOT_SET')}")
+logger.info(f"Environment check - ENVIRONMENT: {os.getenv('ENVIRONMENT', 'NOT_SET')}")
+
 # Get cache instance
 video_cache = get_video_analysis_cache()
 
@@ -1192,20 +1197,26 @@ if __name__ == "__main__":
     logger.info(f"FFmpeg available: {ffmpeg_service.is_available()}")
     logger.info(f"Smart download supported: {ffmpeg_service.is_available()}")
     
+    # Force host to 0.0.0.0 for production/deployment
+    host = "0.0.0.0" if os.getenv("ENVIRONMENT") == "production" else settings.HOST
+    port = int(os.getenv("PORT", settings.PORT))
+    
+    logger.info(f"Starting server on {host}:{port}")
+    
     # Use import string for reload functionality
     if settings.is_development() and settings.RELOAD:
         uvicorn.run(
             "main:app",  # Import string format for reload
-            host=settings.HOST,
-            port=settings.PORT,
+            host=host,
+            port=port,
             reload=True,
             log_level=settings.LOG_LEVEL.lower()
         )
     else:
         uvicorn.run(
             app,  # Direct app object for production
-            host=settings.HOST,
-            port=settings.PORT,
+            host=host,
+            port=port,
             reload=False,
             log_level=settings.LOG_LEVEL.lower()
         )
