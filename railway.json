@@ -16,5 +16,9 @@
         "NODE_ENV": "production"
       }
     }
+  },
+  "service": {
+    "name": "yt-downloader-frontend",
+    "type": "web"
   }
 }
