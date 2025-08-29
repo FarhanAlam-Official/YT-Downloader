@@ -1197,10 +1197,18 @@ if __name__ == "__main__":
     logger.info(f"FFmpeg available: {ffmpeg_service.is_available()}")
     logger.info(f"Smart download supported: {ffmpeg_service.is_available()}")
     
-    # Force host to 0.0.0.0 for production/deployment
-    host = "0.0.0.0" if os.getenv("ENVIRONMENT") == "production" else settings.HOST
+    # Force host to 0.0.0.0 for Railway/deployment (check multiple indicators)
+    is_railway = (
+        os.getenv("ENVIRONMENT") == "production" or 
+        os.getenv("RAILWAY_ENVIRONMENT") or 
+        os.getenv("PORT") or  # Railway always sets PORT
+        "railway" in os.getenv("HOSTNAME", "").lower()
+    )
+    
+    host = "0.0.0.0" if is_railway else settings.HOST
     port = int(os.getenv("PORT", settings.PORT))
     
+    logger.info(f"Railway detected: {is_railway}")
     logger.info(f"Starting server on {host}:{port}")
     
     # Use import string for reload functionality
