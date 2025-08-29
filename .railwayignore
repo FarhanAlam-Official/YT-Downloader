@@ -1,0 +1,19 @@
+# Ignore backend files when deploying frontend
+backend/
+*.py
+requirements.txt
+__pycache__/
+*.pyc
+
+# Keep only frontend files
+!app/
+!package.json
+!next.config.mjs
+!tsconfig.json
+!postcss.config.mjs
+!components.json
+!components/
+!lib/
+!hooks/
+!public/
+!styles/
