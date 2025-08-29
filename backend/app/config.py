@@ -18,7 +18,7 @@ class Settings:
     DESCRIPTION = "High-performance YouTube video downloader with smart stream selection"
     
     # Server Configuration
-    HOST = os.getenv("HOST", "127.0.0.1")
+    HOST = os.getenv("HOST", "127.0.0.1")  # Default to localhost for development
     PORT = int(os.getenv("PORT", 8000))
     RELOAD = os.getenv("ENVIRONMENT", "development") == "development"
     
@@ -27,8 +27,10 @@ class Settings:
         "http://localhost:3000",   # Next.js development server
         "https://localhost:3000",  # HTTPS variant
         "http://127.0.0.1:3000",   # Alternative localhost format
+        "https://easyyt-downloader.up.railway.app",  # Railway frontend
         "https://yt-downloader-frontend.up.railway.app",  # Railway frontend
         "https://ytdownloader-frontend-production.up.railway.app",  # Alternative Railway frontend
+        # Add your actual Railway frontend URL here
     ]
     CORS_ALLOW_CREDENTIALS = True
     CORS_ALLOW_METHODS = ["*"]
